@@ -78,7 +78,7 @@ def process_constants(input):
             op_stack.append(result)
             return
         except ParseFailed as e:
-            #logging.debug(e)
+            logging.debug(e)
             continue
     raise ParseFailed(f"None of the parsers worked for the input {input}")
 
@@ -105,6 +105,17 @@ def sub_operation():
         raise TypeMismatch("Not enough operands for operation sub")
     
 dict_stack[-1]["sub"] = sub_operation
+
+def mul_operation():
+    if(len(op_stack) >= 2):
+        num1 = op_stack.pop()
+        num2 = op_stack.pop()
+        res = num2 * num1
+        op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation mul")
+
+dict_stack[-1]["mul"] = mul_operation
 
 def def_operation():
     if(len(op_stack) >= 2):

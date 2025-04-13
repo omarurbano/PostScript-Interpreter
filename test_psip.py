@@ -36,6 +36,24 @@ def test_sub_operation():
     psip.process_input("10000000000000.0")
     psip.process_input("sub")
     assert psip.op_stack[-1] == 10000000000000.0
-    
+
+def test_mul_operation():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("0")
+    psip.process_input("mul")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear()
+    psip.process_input("20")
+    psip.process_input("10.0")
+    psip.process_input("mul")
+    assert psip.op_stack[-1] == 200.0
+
+    psip.op_stack.clear()
+    psip.process_input("20000000000000")
+    psip.process_input("2")
+    psip.process_input("mul")
+    assert psip.op_stack[-1] == 40000000000000
     
 
