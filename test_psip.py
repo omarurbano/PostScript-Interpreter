@@ -14,3 +14,28 @@ def test_lookup_operation():
     psip.process_input("def")
     psip.process_input("x")
     assert psip.op_stack[-1] == 2
+
+#dealing with negative numbers, making sure everything is in the correct 
+#order
+def test_sub_operation():
+    psip.op_stack.clear()
+    psip.process_input("10")
+    psip.process_input("20")
+    psip.process_input("sub")
+    assert psip.op_stack[-1] == -10
+
+    psip.op_stack.clear()
+    psip.process_input("20")
+    psip.process_input("10")
+    psip.process_input("sub")
+    assert psip.op_stack[-1] == 10
+
+    
+
+    with pytest.raises(TypeMismatch) as excinfo:  
+        psip.op_stack.clear()
+        psip.process_input("20")
+        psip.process_input("sub")
+    assert str(excinfo.value) == "Not enough operands for operation sub"
+    
+
