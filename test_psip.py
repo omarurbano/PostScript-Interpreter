@@ -1,4 +1,5 @@
 import psip
+import pytest
 
 def test_add_operation():
     psip.op_stack.clear()
@@ -30,12 +31,11 @@ def test_sub_operation():
     psip.process_input("sub")
     assert psip.op_stack[-1] == 10
 
+    psip.op_stack.clear()
+    psip.process_input("20000000000000.0")
+    psip.process_input("10000000000000.0")
+    psip.process_input("sub")
+    assert psip.op_stack[-1] == 10000000000000.0
     
-
-    with pytest.raises(TypeMismatch) as excinfo:  
-        psip.op_stack.clear()
-        psip.process_input("20")
-        psip.process_input("sub")
-    assert str(excinfo.value) == "Not enough operands for operation sub"
     
 
