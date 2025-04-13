@@ -56,4 +56,24 @@ def test_mul_operation():
     psip.process_input("mul")
     assert psip.op_stack[-1] == 40000000000000
     
+def test_div_operation():
+    psip.op_stack.clear()
+    psip.process_input("0")
+    psip.process_input("1")
+    psip.process_input("div")
+    assert psip.op_stack[-1] == 0.0
 
+    psip.op_stack.clear()
+    psip.process_input("10.0")
+    psip.process_input("20")
+    psip.process_input("div")
+    assert psip.op_stack[-1] == 0.5
+
+    
+    
+    psip.op_stack.clear()
+    psip.process_input("2")
+    psip.process_input("0")
+    psip.process_input("div")
+    assert len(psip.op_stack) == 2
+    
