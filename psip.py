@@ -83,7 +83,7 @@ def process_constants(input):
             continue
     raise ParseFailed(f"None of the parsers worked for the input {input}")
 
-######## Operations start ##################
+######## Arithmetic Operations start ##################
 def add_operation():
     if(len(op_stack) >= 2):
         op1 = op_stack.pop()
@@ -241,6 +241,9 @@ def sqrt_operation():
 
 dict_stack[-1]["sqrt"] = sqrt_operation
 
+############# End of Arithmetic Operations #################
+
+#Operation to define variables
 def def_operation():
     if(len(op_stack) >= 2):
         value = op_stack.pop()
@@ -258,8 +261,6 @@ def def_operation():
     
 dict_stack[-1]["def"] = def_operation
 
-
-############# End of Operations #################
 
 def pop_and_print():
     if(len(op_stack) >= 1):
