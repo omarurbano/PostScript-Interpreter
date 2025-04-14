@@ -176,3 +176,19 @@ def test_ceiling_operation():
     psip.process_input(str(sys.maxsize - 0.1))
     psip.process_input("ceiling")
     assert psip.op_stack[-1] == float(sys.maxsize)
+
+def test_floor_operation():
+    psip.op_stack.clear()
+    psip.process_input("3.14")
+    psip.process_input("floor")
+    assert psip.op_stack[-1] == 3.0
+
+    psip.op_stack.clear()
+    psip.process_input("0.01")
+    psip.process_input("floor")
+    assert psip.op_stack[-1] == 0.0
+
+    psip.op_stack.clear()
+    psip.process_input(str(sys.maxsize - 0.1))
+    psip.process_input("ceiling")
+    assert psip.op_stack[-1] == float(sys.maxsize - 1)

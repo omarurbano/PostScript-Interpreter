@@ -205,6 +205,16 @@ def ceiling_operation():
 
 dict_stack[-1]["ceiling"] = ceiling_operation
 
+def floor_operation():
+    if(len(op_stack) >= 1):
+        num = op_stack.pop()
+        res = float(math.floor(num))
+        op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation abs")
+
+dict_stack[-1]["floor"] = floor_operation
+
 def def_operation():
     if(len(op_stack) >= 2):
         value = op_stack.pop()
