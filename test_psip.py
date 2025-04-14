@@ -144,4 +144,21 @@ def test_abs_operation():
     psip.process_input("abs")
     assert psip.op_stack[-1] == sys.maxsize + 1 #negative is one less than postive max size
 
-    
+#Testing the absolute value operation
+def test_neg_operation():
+    psip.op_stack.clear()
+    psip.process_input("10")
+    psip.process_input("neg")
+    assert psip.op_stack[-1] == -10
+
+    psip.op_stack.clear()
+    psip.process_input("0")
+    psip.process_input("neg")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear()
+    psip.process_input(str(sys.maxsize))
+    psip.process_input("neg")
+    assert psip.op_stack[-1] == -sys.maxsize-1 #negative is one less than postive max size
+
+       

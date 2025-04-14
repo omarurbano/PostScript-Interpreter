@@ -170,6 +170,8 @@ def idiv_operation():
 
 dict_stack[-1]["idiv"] = idiv_operation
 
+#Absolute value operation which makes any negative number to postive.
+#Stack must have at least one or more values
 def abs_operation():
     if(len(op_stack) >= 1):
         num = op_stack.pop()
@@ -179,6 +181,17 @@ def abs_operation():
         raise TypeMismatch("Not enough operands for operation abs")
 
 dict_stack[-1]["abs"] = abs_operation
+
+#Opposite of abs operation, will make postive numbers to negative numbers
+def neg_operation():
+    if(len(op_stack) >= 1):
+        num = op_stack.pop()
+        res = -(num)
+        op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation abs")
+
+dict_stack[-1]["neg"] = neg_operation
 
 def def_operation():
     if(len(op_stack) >= 2):
