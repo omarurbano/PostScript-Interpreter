@@ -135,6 +135,24 @@ def div_operation():
 
 dict_stack[-1]["div"] = div_operation
 
+def mod_operation():
+    if(len(op_stack) >= 2):
+        num1 = op_stack.pop()
+        num2 = op_stack.pop()
+
+        if (num1 == 0): #Puts back numbers back in the stack
+            op_stack.append(num2)
+            op_stack.append(num1)
+            raise ZeroDivisionError("division by zero error")
+        else:
+            res = num2 % num1
+            op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation mod")
+
+dict_stack[-1]["mod"] = mod_operation
+
+
 def def_operation():
     if(len(op_stack) >= 2):
         value = op_stack.pop()
@@ -151,6 +169,7 @@ def def_operation():
         raise TypeMismatch("Not enoough operands for operation add")
     
 dict_stack[-1]["def"] = def_operation
+
 
 ############# End of Operations #################
 

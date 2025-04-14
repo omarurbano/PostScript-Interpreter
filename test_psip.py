@@ -37,6 +37,7 @@ def test_sub_operation():
     psip.process_input("sub")
     assert psip.op_stack[-1] == 10000000000000.0
 
+#Testing multiplication operation
 def test_mul_operation():
     psip.op_stack.clear()
     psip.process_input("1")
@@ -56,6 +57,7 @@ def test_mul_operation():
     psip.process_input("mul")
     assert psip.op_stack[-1] == 40000000000000
     
+#Testing Division operation
 def test_div_operation():
     psip.op_stack.clear()
     psip.process_input("0")
@@ -69,11 +71,36 @@ def test_div_operation():
     psip.process_input("div")
     assert psip.op_stack[-1] == 0.5
 
-    
-    
+    #Division by zero will make sure the numbers are back on the stack
     psip.op_stack.clear()
     psip.process_input("2")
     psip.process_input("0")
     psip.process_input("div")
-    assert len(psip.op_stack) == 2
+    assert len(psip.op_stack) == 2 #checking length of stack
     
+#Testing mod operation
+def test_mod_operation():
+    psip.op_stack.clear()
+    psip.process_input("10")
+    psip.process_input("2")
+    psip.process_input("mod")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear()
+    psip.process_input("11")
+    psip.process_input("2")
+    psip.process_input("mod")
+    assert psip.op_stack[-1] == 1
+
+    psip.op_stack.clear()
+    psip.process_input("10")
+    psip.process_input("-3")
+    psip.process_input("mod")
+    assert psip.op_stack[-1] == -2
+
+    #mod by zero will make sure the numbers are back on the stack
+    psip.op_stack.clear()
+    psip.process_input("2")
+    psip.process_input("0")
+    psip.process_input("mod")
+    assert len(psip.op_stack) == 2 #checking length of stack
