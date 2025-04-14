@@ -1,4 +1,5 @@
 import logging
+import math
 logging.basicConfig(level = logging.INFO) #INFO, DEBUG
 
 op_stack = []
@@ -192,6 +193,17 @@ def neg_operation():
         raise TypeMismatch("Not enough operands for operation abs")
 
 dict_stack[-1]["neg"] = neg_operation
+
+#Ceiling operation will round up to the nearest whole number
+def ceiling_operation():
+    if(len(op_stack) >= 1):
+        num = op_stack.pop()
+        res = float(math.ceil(num))
+        op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation abs")
+
+dict_stack[-1]["ceiling"] = ceiling_operation
 
 def def_operation():
     if(len(op_stack) >= 2):

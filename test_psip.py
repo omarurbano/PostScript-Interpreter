@@ -161,4 +161,18 @@ def test_neg_operation():
     psip.process_input("neg")
     assert psip.op_stack[-1] == -sys.maxsize-1 #negative is one less than postive max size
 
-       
+def test_ceiling_operation():
+    psip.op_stack.clear()
+    psip.process_input("3.14")
+    psip.process_input("ceiling")
+    assert psip.op_stack[-1] == 4.0
+
+    psip.op_stack.clear()
+    psip.process_input("0.01")
+    psip.process_input("ceiling")
+    assert psip.op_stack[-1] == 1.0
+
+    psip.op_stack.clear()
+    psip.process_input(str(sys.maxsize - 0.1))
+    psip.process_input("ceiling")
+    assert psip.op_stack[-1] == float(sys.maxsize)
