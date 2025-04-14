@@ -152,6 +152,24 @@ def mod_operation():
 
 dict_stack[-1]["mod"] = mod_operation
 
+#Integer division, basically rounds down to nearest whole number, same as div, but converts res to int
+def idiv_operation():
+    if(len(op_stack) >= 2):
+        num1 = op_stack.pop()
+        num2 = op_stack.pop()
+
+        if (num1 == 0): # put numbers back in stack
+            op_stack.append(num2)
+            op_stack.append(num1)
+            raise ZeroDivisionError("division by zero error")
+        else:
+            res = (int) (num2 / num1)
+            op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation div")
+
+dict_stack[-1]["idiv"] = idiv_operation
+
 
 def def_operation():
     if(len(op_stack) >= 2):

@@ -104,3 +104,24 @@ def test_mod_operation():
     psip.process_input("0")
     psip.process_input("mod")
     assert len(psip.op_stack) == 2 #checking length of stack
+
+#Testing Division operation
+def test_idiv_operation():
+    psip.op_stack.clear()
+    psip.process_input("10")
+    psip.process_input("3")
+    psip.process_input("idiv")
+    assert psip.op_stack[-1] == 3
+
+    psip.op_stack.clear()
+    psip.process_input("10.0")
+    psip.process_input("20")
+    psip.process_input("idiv")
+    assert psip.op_stack[-1] == 0
+
+    #Division by zero will make sure the numbers are back on the stack
+    psip.op_stack.clear()
+    psip.process_input("2")
+    psip.process_input("0")
+    psip.process_input("idiv")
+    assert len(psip.op_stack) == 2 #checking length of stack
