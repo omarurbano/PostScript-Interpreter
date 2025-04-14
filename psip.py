@@ -215,6 +215,16 @@ def floor_operation():
 
 dict_stack[-1]["floor"] = floor_operation
 
+def round_operation():
+    if(len(op_stack) >= 1):
+        num = op_stack.pop()
+        res = float(round(num))
+        op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation abs")
+
+dict_stack[-1]["round"] = round_operation
+
 def def_operation():
     if(len(op_stack) >= 2):
         value = op_stack.pop()

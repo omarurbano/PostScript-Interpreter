@@ -192,3 +192,24 @@ def test_floor_operation():
     psip.process_input(str(sys.maxsize - 0.1))
     psip.process_input("ceiling")
     assert psip.op_stack[-1] == float(sys.maxsize - 1)
+
+def test_round_operation():
+    psip.op_stack.clear()
+    psip.process_input("3.49")
+    psip.process_input("round")
+    assert psip.op_stack[-1] == 3.0
+
+    psip.op_stack.clear()
+    psip.process_input("3.5")
+    psip.process_input("round")
+    assert psip.op_stack[-1] == 4.0
+
+    psip.op_stack.clear()
+    psip.process_input(str(sys.maxsize - 0.1)) #will round up
+    psip.process_input("round")
+    assert psip.op_stack[-1] == float(sys.maxsize)
+
+    psip.op_stack.clear()
+    psip.process_input(str(sys.maxsize - 0.6)) #will round down
+    psip.process_input("round")
+    assert psip.op_stack[-1] == float(sys.maxsize - 1)
