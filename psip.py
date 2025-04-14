@@ -170,6 +170,15 @@ def idiv_operation():
 
 dict_stack[-1]["idiv"] = idiv_operation
 
+def abs_operation():
+    if(len(op_stack) >= 1):
+        num = op_stack.pop()
+        res = abs(num)
+        op_stack.append(res)
+    else:
+        raise TypeMismatch("Not enough operands for operation abs")
+
+dict_stack[-1]["abs"] = abs_operation
 
 def def_operation():
     if(len(op_stack) >= 2):

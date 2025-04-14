@@ -1,5 +1,6 @@
 import psip
 import pytest
+import sys
 
 def test_add_operation():
     psip.op_stack.clear()
@@ -125,3 +126,22 @@ def test_idiv_operation():
     psip.process_input("0")
     psip.process_input("idiv")
     assert len(psip.op_stack) == 2 #checking length of stack
+
+#Testing the absolute value operation
+def test_abs_operation():
+    psip.op_stack.clear()
+    psip.process_input("-10")
+    psip.process_input("abs")
+    assert psip.op_stack[-1] == 10
+
+    psip.op_stack.clear()
+    psip.process_input("0")
+    psip.process_input("abs")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear()
+    psip.process_input(str(-sys.maxsize))
+    psip.process_input("abs")
+    assert psip.op_stack[-1] == sys.maxsize + 1 #negative is one less than postive max size
+
+    
