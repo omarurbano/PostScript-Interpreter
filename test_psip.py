@@ -161,6 +161,7 @@ def test_neg_operation():
     psip.process_input("neg")
     assert psip.op_stack[-1] == -sys.maxsize-1 #negative is one less than postive max size
 
+#Testing ceiling operation to see if value is rounded up to the nearest value.
 def test_ceiling_operation():
     psip.op_stack.clear()
     psip.process_input("3.14")
@@ -177,6 +178,7 @@ def test_ceiling_operation():
     psip.process_input("ceiling")
     assert psip.op_stack[-1] == float(sys.maxsize)
 
+#Testing floor operation to see if values are rounded down to the nearest whole number
 def test_floor_operation():
     psip.op_stack.clear()
     psip.process_input("3.14")
@@ -193,6 +195,8 @@ def test_floor_operation():
     psip.process_input("ceiling")
     assert psip.op_stack[-1] == float(sys.maxsize - 1)
 
+#Testing round operation based on decimal value anything below .5 and
+#.5 and higher
 def test_round_operation():
     psip.op_stack.clear()
     psip.process_input("3.49")
@@ -213,3 +217,20 @@ def test_round_operation():
     psip.process_input(str(sys.maxsize - 0.6)) #will round down
     psip.process_input("round")
     assert psip.op_stack[-1] == float(sys.maxsize - 1)
+
+def testing_sqrt_operation():
+    psip.op_stack.clear()
+    psip.process_input("100")
+    psip.process_input("sqrt")
+    assert psip.op_stack[-1] == 10.0
+
+    psip.op_stack.clear()
+    psip.process_input("0")
+    psip.process_input("sqrt")
+    assert psip.op_stack[-1] == 0.0
+
+    psip.op_stack.clear()
+    psip.process_input("-10")
+    psip.process_input("sqrt") #Shouldn't pop due to negative number
+    assert len(psip.op_stack) == 1 
+

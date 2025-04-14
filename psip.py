@@ -205,6 +205,7 @@ def ceiling_operation():
 
 dict_stack[-1]["ceiling"] = ceiling_operation
 
+#Floor operation will round down to the nearest whole number
 def floor_operation():
     if(len(op_stack) >= 1):
         num = op_stack.pop()
@@ -215,6 +216,8 @@ def floor_operation():
 
 dict_stack[-1]["floor"] = floor_operation
 
+#Round operation will round down if decimal is less than .5, will round up if
+#it is .5 or higher
 def round_operation():
     if(len(op_stack) >= 1):
         num = op_stack.pop()
@@ -224,6 +227,19 @@ def round_operation():
         raise TypeMismatch("Not enough operands for operation abs")
 
 dict_stack[-1]["round"] = round_operation
+
+def sqrt_operation():
+    if(len(op_stack) >= 1):
+        if (op_stack[-1] >=0):
+            num = op_stack.pop()
+            res = math.sqrt(num)
+            op_stack.append(res)
+        else:
+            raise Exception("Can't take sqrt of negative numbers!")
+    else:
+        raise TypeMismatch("Not enough operands for operation abs")
+
+dict_stack[-1]["sqrt"] = sqrt_operation
 
 def def_operation():
     if(len(op_stack) >= 2):
