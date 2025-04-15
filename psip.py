@@ -17,6 +17,11 @@ class TypeMismatch(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+class StackEmpty(Exception):
+    """Exception with stack being empty"""
+    def __init__(self, message):
+        super().__init__(message)
+
 def repl():
     while True:
         user_input = input("REPL> ")
@@ -261,16 +266,33 @@ def def_operation():
     
 dict_stack[-1]["def"] = def_operation
 
+######################### Stack Operations Begin #######################################
 
 def pop_and_print():
     if(len(op_stack) >= 1):
         op1 = op_stack.pop()
         print(op1)
     else:
-        raise TypeMismatch("Stack is empty! Nothing to print")
+        raise StackEmpty("Stack is empty! Nothing to print")
 
 dict_stack[-1]["="] = pop_and_print
 
+def exch_operation():
+    if (len(op_stack) >= 2):
+        num1 = op_stack.pop() #Top of stack
+        num2 = op_stack.pop() #Next in line
+        op_stack.append(num1)
+        op_stack.append(num2)
+    else:
+        raise StackEmpty("Stack is empty, nothing to exchange")
+
+dict_stack[-1]["exch"] = exch_operation
+
+######################### Stack Operations End #######################################
+
+#This is what will go through and check the dictionary to see if it is callable
+#If it is not callable, then it will check the instance, and process input,
+#otherwise it is a value and will append to the stack.
 def lookup_in_dictionary(input):
     top_dict = dict_stack[-1]
     if input in top_dict:

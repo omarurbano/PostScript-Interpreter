@@ -234,3 +234,22 @@ def testing_sqrt_operation():
     psip.process_input("sqrt") #Shouldn't pop due to negative number
     assert len(psip.op_stack) == 1 
 
+#testing our exchance manipulation to see if things get swapped properly
+def testing_exch_operation():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("2")
+    psip.process_input("exch")
+    assert psip.op_stack[-1] == 1
+
+    psip.op_stack.clear()
+    psip.process_input("/x = 3")
+    psip.process_input("/square {dup mul} def")
+    psip.process_input("exch")
+    assert psip.op_stack[-1] == "/x = 3"
+
+    psip.op_stack.clear()
+    psip.process_input("/x = 3")
+    psip.process_input("exch")
+    assert len(psip.op_stack) == 1
+
