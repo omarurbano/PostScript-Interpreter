@@ -218,6 +218,7 @@ def test_round_operation():
     psip.process_input("round")
     assert psip.op_stack[-1] == float(sys.maxsize - 1)
 
+#Testing to sqrt arthemtic is working properly
 def testing_sqrt_operation():
     psip.op_stack.clear()
     psip.process_input("100")
@@ -234,7 +235,7 @@ def testing_sqrt_operation():
     psip.process_input("sqrt") #Shouldn't pop due to negative number
     assert len(psip.op_stack) == 1 
 
-#testing our exchance manipulation to see if things get swapped properly
+#Testing our exchance manipulation to see if things get swapped properly
 def testing_exch_operation():
     psip.op_stack.clear()
     psip.process_input("1")
@@ -253,6 +254,7 @@ def testing_exch_operation():
     psip.process_input("exch")
     assert len(psip.op_stack) == 1
 
+#Testing stack manipulation where we use the "pop" command to pop an item off the stack
 def testing_pop_operation():
     psip.op_stack.clear()
     psip.process_input("1")
@@ -268,6 +270,7 @@ def testing_pop_operation():
     psip.process_input("pop")
     assert len(psip.op_stack) == 0
 
+#Testing stack manipulation where we duplicate the top of the stack
 def testing_dup_operation():
     psip.op_stack.clear()
     psip.process_input("1")
@@ -284,6 +287,7 @@ def testing_dup_operation():
     psip.process_input("dup")
     assert len(psip.op_stack) == 2
 
+#Testing stack manipulation, where we see that we clear the entire stack empty
 def testing_clear_operation():
     psip.op_stack.clear()
     for i in range(100000):
@@ -291,3 +295,17 @@ def testing_clear_operation():
     
     psip.process_input("clear")
     assert len(psip.op_stack) == 0
+
+#Testing stack manipulation, where we count the number of items in stack and push the result
+#to the top of the stack
+def testing_counting_operation():
+    psip.op_stack.clear()
+    for i in range(100000):
+        psip.process_input(f"{i}")
+    
+    psip.process_input("count")
+    assert psip.op_stack[-1] == 100000
+
+    psip.op_stack.clear()
+    psip.process_input("count")
+    assert psip.op_stack[-1] == 0

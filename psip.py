@@ -311,6 +311,12 @@ def clear_operation():
 
 dict_stack[-1]["clear"] = clear_operation
 
+def count_operation():
+    count = len(op_stack)
+    op_stack.append(count)
+
+dict_stack[-1]["count"] = count_operation
+
 ######################### Stack Operations End #######################################
 
 #This is what will go through and check the dictionary to see if it is callable
