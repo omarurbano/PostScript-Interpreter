@@ -306,6 +306,11 @@ def dup_operation():
 
 dict_stack[-1]["dup"] = dup_operation
 
+def clear_operation():
+    op_stack.clear()
+
+dict_stack[-1]["clear"] = clear_operation
+
 ######################### Stack Operations End #######################################
 
 #This is what will go through and check the dictionary to see if it is callable

@@ -284,3 +284,10 @@ def testing_dup_operation():
     psip.process_input("dup")
     assert len(psip.op_stack) == 2
 
+def testing_clear_operation():
+    psip.op_stack.clear()
+    for i in range(100000):
+        psip.process_input(f"{i}")
+    
+    psip.process_input("clear")
+    assert len(psip.op_stack) == 0
