@@ -288,6 +288,14 @@ def exch_operation():
 
 dict_stack[-1]["exch"] = exch_operation
 
+def pop_operation():
+    if (len(op_stack) >= 1):
+        op_stack.pop()
+    else:
+        raise StackEmpty("Stack is empty, nothing to pop")
+
+dict_stack[-1]["pop"] = pop_operation
+
 ######################### Stack Operations End #######################################
 
 #This is what will go through and check the dictionary to see if it is callable

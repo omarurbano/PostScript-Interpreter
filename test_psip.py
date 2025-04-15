@@ -253,3 +253,18 @@ def testing_exch_operation():
     psip.process_input("exch")
     assert len(psip.op_stack) == 1
 
+def testing_pop_operation():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("2")
+    psip.process_input("3")
+    psip.process_input("4")
+    psip.process_input("pop")
+    assert len(psip.op_stack) == 3
+    psip.process_input("pop")
+    assert len(psip.op_stack) == 2
+    psip.process_input("pop")
+    assert len(psip.op_stack) == 1
+    psip.process_input("pop")
+    assert len(psip.op_stack) == 0
+    
