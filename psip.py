@@ -296,6 +296,16 @@ def pop_operation():
 
 dict_stack[-1]["pop"] = pop_operation
 
+def dup_operation():
+    if (len(op_stack) > 0):
+        num = op_stack.pop()
+        op_stack.append(num)
+        op_stack.append(num)
+    else:
+        raise StackEmpty("Stack is empty, nothing to dup")
+
+dict_stack[-1]["dup"] = dup_operation
+
 ######################### Stack Operations End #######################################
 
 #This is what will go through and check the dictionary to see if it is callable

@@ -267,4 +267,20 @@ def testing_pop_operation():
     assert len(psip.op_stack) == 1
     psip.process_input("pop")
     assert len(psip.op_stack) == 0
-    
+
+def testing_dup_operation():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("dup")
+    assert len(psip.op_stack) == 2
+
+    psip.op_stack.clear()
+    psip.process_input(str(sys.maxsize))
+    psip.process_input("dup")
+    assert len(psip.op_stack) == 2
+
+    psip.op_stack.clear()
+    psip.process_input("/x = 3 def")
+    psip.process_input("dup")
+    assert len(psip.op_stack) == 2
+
