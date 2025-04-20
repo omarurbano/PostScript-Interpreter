@@ -1,6 +1,6 @@
 import logging
 import math
-logging.basicConfig(level = logging.INFO) #INFO, DEBUG
+logging.basicConfig(level = logging.DEBUG) #INFO, DEBUG
 
 op_stack = []
 
@@ -17,8 +17,15 @@ class TypeMismatch(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+#For stack operations
 class StackEmpty(Exception):
     """Exception with stack being empty"""
+    def __init__(self, message):
+        super().__init__(message)
+
+#For copy operation in stack manipulation, if number is greater than length of stack
+class GreaterThanStack(Exception):
+    """Number is greater than length of stack"""
     def __init__(self, message):
         super().__init__(message)
 
@@ -316,6 +323,33 @@ def count_operation():
     op_stack.append(count)
 
 dict_stack[-1]["count"] = count_operation
+
+def copy_operation():
+    copyList = []
+
+    if(len(op_stack) > 0):
+        if(op_stack[-1] < len(op_stack)): #if amount to copy is less than stack length
+            amount = op_stack.pop()
+
+            while(amount > 0):
+                copyList.append(op_stack.pop())
+                amount -= 1
+            
+            i = -(len(copyList)) - 1
+            j = -1
+            while (j > i):
+                op_stack.append(copyList[j])
+                j -= 1
+
+            while(len(copyList) > 0):
+                op_stack.append(copyList.pop())
+
+        else:
+            raise GreaterThanStack("Number greater than stack length!")
+    else:
+        raise StackEmpty("Stack empty, nothing to copy!")
+
+dict_stack[-1]["copy"] = copy_operation
 
 ######################### Stack Operations End #######################################
 

@@ -309,3 +309,27 @@ def testing_counting_operation():
     psip.op_stack.clear()
     psip.process_input("count")
     assert psip.op_stack[-1] == 0
+
+#Testing the copy stack manipulation to see if the correct number of items are copied over
+def testing_copy_operation():
+    psip.op_stack.clear()
+    for i in range(5):
+        psip.process_input(f"{i}")
+    psip.process_input("10")
+    psip.process_input("copy")
+    assert len(psip.op_stack) == 6 #nothing got copied because number at top is greater than stack length
+
+    psip.process_input("2")
+    psip.process_input("copy")
+
+    assert psip.op_stack[-1] == psip.op_stack[-1 -2]
+    assert psip.op_stack[-2] == psip.op_stack[-2 - 2]
+
+    psip.op_stack.clear()
+    for i in range(1000):
+        psip.process_input(f"{i}")
+    psip.process_input("1000")
+    psip.process_input("copy")
+    assert len(psip.op_stack) == 2000
+
+
