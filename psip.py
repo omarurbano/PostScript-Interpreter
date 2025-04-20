@@ -70,12 +70,20 @@ def process_name_constant(input):
         return input
     else:
         raise ParseFailed("Can't parse into name constant")
+    
+def process_string_input(input):
+    logging.debug(f"Input to process string: {input}")
+    if input.startswith("("):
+        return input
+    else:
+        raise ParseFailed("Can't parse into string")
 
 PARSERS = [
     process_boolean,
     process_number,
     process_code_block,
-    process_name_constant
+    process_name_constant,
+    process_string_input
 
 ]
 
@@ -351,7 +359,9 @@ def copy_operation():
 
 dict_stack[-1]["copy"] = copy_operation
 
-######################### Stack Operations End #######################################
+######################### Stack Operations End ############################################
+
+######################### Dictionary Operations Begin #####################################
 
 #This is what will go through and check the dictionary to see if it is callable
 #If it is not callable, then it will check the instance, and process input,
@@ -370,6 +380,38 @@ def lookup_in_dictionary(input):
             op_stack.append(value)
     else:
         raise ParseFailed(f"Input {input} is not in dictionary")
+    
+def dict_operation():
+    if (len(op_stack) > 0):
+        num = -1
+        if (str.isdigit(op_stack[-1])):
+            num = op_stack.pop()
+            dict_stack.insert(0, {})
+            # dict_stack.append({})
+            # dict_stack[-1]["maxSize"] = num
+            # dict_stack[-1]["currSize"] = 0
+            # op_stack.append("--dict--")
+        
+    
+    else:
+        raise StackEmpty("Stack is empty, unable to create dictionary!")
+    
+######################### Dictionary Operations End #####################################
+    
+######################### String Operations Begin #####################################
+    
+def strLength():
+    if (len(op_stack) > 0):
+        if op_stack[-1].startswith("(") and op_stack[-1][1] != ")": #if starts with ( and index 1 is not )
+            op_stack.append(len(op_stack[-1]) - 2)
+        else:
+            print(op_stack[-1][1]) #means they entered () aka an empty string
+            op_stack.append(0)
+    else:
+        raise StackEmpty("Stack is empty, unable to get length of string")
+dict_stack[-1]["length"] = strLength
+    
+######################### String Operations End #####################################
 
 def process_input(user_input):
     #print(user_input)

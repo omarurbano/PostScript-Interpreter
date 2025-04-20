@@ -332,4 +332,23 @@ def testing_copy_operation():
     psip.process_input("copy")
     assert len(psip.op_stack) == 2000
 
+#Testing the to see if we get the correct length of a string
+def testing_string_length():
+    psip.op_stack.clear()
+    psip.process_input("(Hello)")
+    psip.process_input("length")
+    assert psip.op_stack[-1] == 5
 
+    psip.op_stack.clear()
+    psip.process_input("length")
+    assert len(psip.op_stack) == 0
+    
+    psip.op_stack.clear()
+    psip.process_input("()")
+    psip.process_input("length")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear()
+    psip.process_input("(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)")
+    psip.process_input("length")
+    assert psip.op_stack[-1] == 40
