@@ -457,3 +457,35 @@ def testing_eq():
     psip.process_input("false")
     psip.process_input("eq")
     assert psip.op_stack[-1] == False
+
+#Testing not equals operation, compares two inputs and check if its true or false
+def testing_ne():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("ne")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("2")
+    psip.process_input("ne")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("(Omar)")
+    psip.process_input("(Omar)")
+    psip.process_input("ne")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("true")
+    psip.process_input("ne")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("false")
+    psip.process_input("ne")
+    assert psip.op_stack[-1] == True
