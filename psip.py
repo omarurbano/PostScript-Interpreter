@@ -403,7 +403,7 @@ def dict_operation():
     
 ######################### Dictionary Operations End #####################################
     
-######################### String Operations Begin #####################################
+#########################   String Operations Begin #####################################
 
 #Gets the length of the string
 def strLength():
@@ -501,7 +501,25 @@ def strPutInterval():
         raise TypeMismatch("Not enough arguments in stack")
     
 dict_stack[-1]["putinterval"] = strPutInterval
-######################### String Operations End #####################################
+######################### String Operations End #########################################
+
+#########################   Bit & Bool Operations Begin #################################
+
+def eq_operation():
+    if (len(op_stack) >= 2):
+        var2 = op_stack.pop()
+        var1 = op_stack.pop()
+
+        if (var1 == var2):
+            op_stack.append(True)
+        else:
+            op_stack.append(False)
+    
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+    
+dict_stack[-1]["eq"] = eq_operation
+#########################   Bit & Bool Operations End ###################################
 
 def process_input(user_input):
     #print(user_input)

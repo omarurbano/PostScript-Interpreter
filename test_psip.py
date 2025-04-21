@@ -396,6 +396,7 @@ def testing_get():
     psip.process_input("get")
     assert psip.op_stack[-1] == 32
 
+#Testing putinterval to see if it correctly replaces substrings
 def testing_PutInterval():
     psip.op_stack.clear()
     psip.process_input("(Hello)")
@@ -424,3 +425,35 @@ def testing_PutInterval():
     psip.process_input("(B)")
     psip.process_input("putinterval")
     assert psip.op_stack[-1] == "Bob, Hello"
+
+#Testing equals operation, compares two inputs and check if its true or false
+def testing_eq():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("eq")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("2")
+    psip.process_input("eq")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("(Omar)")
+    psip.process_input("(Omar)")
+    psip.process_input("eq")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("true")
+    psip.process_input("eq")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("false")
+    psip.process_input("eq")
+    assert psip.op_stack[-1] == False
