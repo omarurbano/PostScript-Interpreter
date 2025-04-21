@@ -353,6 +353,7 @@ def testing_string_length():
     psip.process_input("length")
     assert psip.op_stack[-1] == 40
 
+#Testing to see if the start and amount to copy over produces the substrings we expect
 def testing_getinterval():
     psip.op_stack.clear()
     psip.process_input("(Hello, World!)")
@@ -374,3 +375,23 @@ def testing_getinterval():
     psip.process_input("1")
     psip.process_input("getinterval")
     assert psip.op_stack[-1] == "I"
+
+#Testing get string operation, gets the ascii value of index indicated from string
+def testing_get():
+    psip.op_stack.clear()
+    psip.process_input("(Hello)")
+    psip.process_input("0")
+    psip.process_input("get")
+    assert psip.op_stack[-1] == 72
+
+    psip.op_stack.clear()
+    psip.process_input("(Hello,)")
+    psip.process_input("5")
+    psip.process_input("get")
+    assert psip.op_stack[-1] == 44
+
+    psip.op_stack.clear()
+    psip.process_input("( )")
+    psip.process_input("0")
+    psip.process_input("get")
+    assert psip.op_stack[-1] == 32

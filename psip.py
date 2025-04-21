@@ -408,7 +408,7 @@ def dict_operation():
 def strLength():
     if (len(op_stack) > 0):
         if op_stack[-1].startswith("(") and op_stack[-1][1] != ")": #if starts with ( and index 1 is not )
-            op_stack.append(len(op_stack[-1]) - 2)
+            op_stack.append(len(op_stack.pop()) - 2)
         else:
             print(op_stack[-1][1]) #means they entered () aka an empty string
             op_stack.append(0)
@@ -422,7 +422,7 @@ def strGetInterval():
         traverse = op_stack.pop() #how much to copy over
         start = op_stack.pop() #start index
         if op_stack[-1].startswith("("): #if starts with (
-            word = op_stack[-1] #copying word
+            word = op_stack.pop() #copying word
             length = len(word)
             word = word[1:length - 1]
 
@@ -439,9 +439,30 @@ def strGetInterval():
                 raise NotAnIntegerArg("Not all arguments are integers")
         
     else:
-        raise StackEmpty("Stack is empty, unable to get length of string")
+        raise TypeMismatch("Not enough arguments in stack")
     
 dict_stack[-1]["getinterval"] = strGetInterval
+
+def strGet():
+    if (len(op_stack) >= 2):
+        index = op_stack.pop()
+
+        if op_stack[-1].startswith("(") and op_stack[-1][1] != ")": #if starts with (
+            word = op_stack.pop() #copying word
+            length = len(word)
+            word = word[1:length - 1]
+
+            if (index < length - 1):
+                res = word[index]
+                op_stack.append(ord(res))
+            else:
+                raise Exception("Index greater than length of string")
+        else: # got the '()' input, which case we put back index
+            op_stack.append(index)
+
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+dict_stack[-1]["get"] = strGet
     
 ######################### String Operations End #####################################
 
