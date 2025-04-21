@@ -404,7 +404,8 @@ def dict_operation():
 ######################### Dictionary Operations End #####################################
     
 ######################### String Operations Begin #####################################
-    
+
+#Gets the length of the string
 def strLength():
     if (len(op_stack) > 0):
         if op_stack[-1].startswith("(") and op_stack[-1][1] != ")": #if starts with ( and index 1 is not )
@@ -416,6 +417,7 @@ def strLength():
         raise StackEmpty("Stack is empty, unable to get length of string")
 dict_stack[-1]["length"] = strLength
 
+#Gets substring of a string
 def strGetInterval():
     if (len(op_stack) >= 3):
         result = ""
@@ -443,6 +445,7 @@ def strGetInterval():
     
 dict_stack[-1]["getinterval"] = strGetInterval
 
+#Gets the character of the string based on the index, returns ascii value
 def strGet():
     if (len(op_stack) >= 2):
         index = op_stack.pop()
@@ -463,7 +466,41 @@ def strGet():
     else:
         raise TypeMismatch("Not enough arguments in stack")
 dict_stack[-1]["get"] = strGet
+
+#Replaces substrings based on the index given. string2 must not be longer than string 1
+def strPutInterval():
+    if (len(op_stack) >= 3):
+        string2 = op_stack.pop()
+        startIndex = op_stack.pop()
+        string1 = op_stack.pop()
+
+        if(len(string2) <= len(string1) and startIndex.is_integer()): #If string2 is longer, will not process, checking if proper argument
+            string1 = string1[1: len(string1) - 1] #Taking out parenthesis
+            string2 = string2[1: len(string2) - 1] #Taking out parenthesis
+            res = string1[0: startIndex]
+            j = startIndex
+            
+            
+            print(f"Before loop1: {res}")
+            for i in string2:
+                res += i
+                j += 1
+            
+            print(f"After loop1: {res}, {j}")
+            if (j < len(string1)): #If string2 is smaller, want to copy over rest of string 1
+                while (j < len(string1)):
+                    res += string1[j]
+                    j +=1 
+
+            op_stack.append(res)
+
+        else:
+            raise TypeMismatch("Is not a digit or string2 longer than string1")
+            
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
     
+dict_stack[-1]["putinterval"] = strPutInterval
 ######################### String Operations End #####################################
 
 def process_input(user_input):

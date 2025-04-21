@@ -395,3 +395,32 @@ def testing_get():
     psip.process_input("0")
     psip.process_input("get")
     assert psip.op_stack[-1] == 32
+
+def testing_PutInterval():
+    psip.op_stack.clear()
+    psip.process_input("(Hello)")
+    psip.process_input("0")
+    psip.process_input("(Jello)")
+    psip.process_input("putinterval")
+    assert psip.op_stack[-1] == "Jello"
+
+    psip.op_stack.clear()
+    psip.process_input("(H)")
+    psip.process_input("0")
+    psip.process_input("(J)")
+    psip.process_input("putinterval")
+    assert psip.op_stack[-1] == "J"
+
+    psip.op_stack.clear()
+    psip.process_input("(Hello Cali)")
+    psip.process_input("6")
+    psip.process_input("(Omar)")
+    psip.process_input("putinterval")
+    assert psip.op_stack[-1] == "Hello Omar"
+
+    psip.op_stack.clear()
+    psip.process_input("(Job, Hello)")
+    psip.process_input("0")
+    psip.process_input("(B)")
+    psip.process_input("putinterval")
+    assert psip.op_stack[-1] == "Bob, Hello"
