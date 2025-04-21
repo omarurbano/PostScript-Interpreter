@@ -352,3 +352,25 @@ def testing_string_length():
     psip.process_input("(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)")
     psip.process_input("length")
     assert psip.op_stack[-1] == 40
+
+def testing_getinterval():
+    psip.op_stack.clear()
+    psip.process_input("(Hello, World!)")
+    psip.process_input("7")
+    psip.process_input("5")
+    psip.process_input("getinterval")
+    assert psip.op_stack[-1] == "World"
+
+    psip.op_stack.clear()
+    psip.process_input("()")
+    psip.process_input("0")
+    psip.process_input("0")
+    psip.process_input("getinterval")
+    assert psip.op_stack[-1] == ""
+
+    psip.op_stack.clear()
+    psip.process_input("(I)")
+    psip.process_input("0")
+    psip.process_input("1")
+    psip.process_input("getinterval")
+    assert psip.op_stack[-1] == "I"

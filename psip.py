@@ -29,6 +29,11 @@ class GreaterThanStack(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+class NotAnIntegerArg(Exception):
+    """operations that require int's as arguments"""
+    def __init__(self, message):
+        super().__init__(message)
+
 def repl():
     while True:
         user_input = input("REPL> ")
@@ -410,6 +415,33 @@ def strLength():
     else:
         raise StackEmpty("Stack is empty, unable to get length of string")
 dict_stack[-1]["length"] = strLength
+
+def strGetInterval():
+    if (len(op_stack) >= 3):
+        result = ""
+        traverse = op_stack.pop() #how much to copy over
+        start = op_stack.pop() #start index
+        if op_stack[-1].startswith("("): #if starts with (
+            word = op_stack[-1] #copying word
+            length = len(word)
+            word = word[1:length - 1]
+
+            if (traverse.is_integer() and start.is_integer()):
+                if ((start+traverse) - 1 < length):
+                        while (traverse > 0):
+                            result += word[start]
+                            start += 1
+                            traverse -= 1
+                        op_stack.append(result)
+                else:
+                    raise Exception("Interval greater than string length")
+            else:
+                raise NotAnIntegerArg("Not all arguments are integers")
+        
+    else:
+        raise StackEmpty("Stack is empty, unable to get length of string")
+    
+dict_stack[-1]["getinterval"] = strGetInterval
     
 ######################### String Operations End #####################################
 
