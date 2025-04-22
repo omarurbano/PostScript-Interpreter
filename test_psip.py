@@ -489,3 +489,31 @@ def testing_ne():
     psip.process_input("false")
     psip.process_input("ne")
     assert psip.op_stack[-1] == True
+
+#Testing greater or equals operation, compares two inputs and check if its true or false
+def testing_ge():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("ge")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("2")
+    psip.process_input("ge")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("(Omar)")
+    psip.process_input("(Omar)")
+    psip.process_input("ge")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("(O)")
+    psip.process_input("()")
+    psip.process_input("ge")
+    assert psip.op_stack[-1] == True
+
+    

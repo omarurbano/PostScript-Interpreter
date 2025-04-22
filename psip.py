@@ -534,6 +534,21 @@ def ne_operation():
         raise TypeMismatch("Not enough arguments in stack")
     
 dict_stack[-1]["ne"] = ne_operation
+
+def ge_operation():
+    if (len(op_stack) >= 2):
+        var2 = op_stack.pop()
+        var1 = op_stack.pop()
+
+        if (var1 >= var2):
+            op_stack.append(True)
+        else:
+            op_stack.append(False)
+    
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+    
+dict_stack[-1]["ge"] = ge_operation
 #########################   Bit & Bool Operations End ###################################
 
 def process_input(user_input):
