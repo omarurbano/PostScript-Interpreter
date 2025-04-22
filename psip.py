@@ -505,6 +505,7 @@ dict_stack[-1]["putinterval"] = strPutInterval
 
 #########################   Bit & Bool Operations Begin #################################
 
+#checks to see if inputs are equal
 def eq_operation():
     if (len(op_stack) >= 2):
         var2 = op_stack.pop()
@@ -520,6 +521,7 @@ def eq_operation():
     
 dict_stack[-1]["eq"] = eq_operation
 
+#checks if var1 is not equal to var2
 def ne_operation():
     if (len(op_stack) >= 2):
         var2 = op_stack.pop()
@@ -535,6 +537,7 @@ def ne_operation():
     
 dict_stack[-1]["ne"] = ne_operation
 
+#checks to see if var1 is greater or equal to var2
 def ge_operation():
     if (len(op_stack) >= 2):
         var2 = op_stack.pop()
@@ -550,6 +553,7 @@ def ge_operation():
     
 dict_stack[-1]["ge"] = ge_operation
 
+#checks to see if var1 is greater than var2
 def gt_operation():
     if (len(op_stack) >= 2):
         var2 = op_stack.pop()
@@ -565,6 +569,7 @@ def gt_operation():
     
 dict_stack[-1]["gt"] = gt_operation
 
+#checks to see if var1 is less than or equal to var2
 def le_operation():
     if (len(op_stack) >= 2):
         var2 = op_stack.pop()
@@ -580,6 +585,7 @@ def le_operation():
     
 dict_stack[-1]["le"] = le_operation
 
+#checks to see if var1 is less than var2
 def lt_operation():
     if (len(op_stack) >= 2):
         var2 = op_stack.pop()
@@ -594,6 +600,28 @@ def lt_operation():
         raise TypeMismatch("Not enough arguments in stack")
     
 dict_stack[-1]["lt"] = lt_operation
+
+#Performs logical and if its a bool and bitwise and if an integer
+def and_operation():
+    if (len(op_stack) >= 2):
+        var2 = op_stack.pop()
+        var1 = op_stack.pop()
+        
+        if(isinstance(var1, int) and isinstance(var2, int)):
+            res = var1 & var2
+            op_stack.append(res)
+        elif (isinstance(var1, bool) and isinstance(var2, bool)):
+            res = var1 and var2
+            op_stack.append(res)
+        else: #different types than what and can do, put back in stack and raise exception
+            op_stack.append(var1)
+            op_stack.append(var2)
+            raise TypeMismatch("Not matching inputs or not of type int or bool")
+            
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+    
+dict_stack[-1]["and"] = and_operation
 #########################   Bit & Bool Operations End ###################################
 
 def process_input(user_input):

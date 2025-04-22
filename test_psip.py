@@ -593,3 +593,41 @@ def testing_lt():
     psip.process_input("(O)")
     psip.process_input("lt")
     assert psip.op_stack[-1] == True
+
+#testing logical 'and' and bitwise 'and' to see if we get expected outputs
+def testing_and_operation():
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("true")
+    psip.process_input("and")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("false")
+    psip.process_input("and")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("and")
+    assert psip.op_stack[-1] == 1
+
+    psip.op_stack.clear()
+    psip.process_input("0")
+    psip.process_input("1")
+    psip.process_input("and")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear()
+    psip.process_input("12")
+    psip.process_input("10")
+    psip.process_input("and")
+    assert psip.op_stack[-1] == 8
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("(Hello)")
+    psip.process_input("and")
+    assert len(psip.op_stack) == 2 #checking to see if they get put back in stack
