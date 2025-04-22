@@ -658,3 +658,41 @@ def testing_not_operation():
     psip.process_input("(Hi)")
     psip.process_input("not")
     assert len(psip.op_stack) == 1 #not valid input, number of inputs in stack remains the same
+
+    #testing logical 'or' and bitwise 'or' to see if we get expected outputs
+def testing_or_operation():
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("true")
+    psip.process_input("or")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("false")
+    psip.process_input("or")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("or")
+    assert psip.op_stack[-1] == 1
+
+    psip.op_stack.clear()
+    psip.process_input("0")
+    psip.process_input("1")
+    psip.process_input("or")
+    assert psip.op_stack[-1] == 1
+
+    psip.op_stack.clear()
+    psip.process_input("12")
+    psip.process_input("10")
+    psip.process_input("or")
+    assert psip.op_stack[-1] == 14
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("(Hello)")
+    psip.process_input("or")
+    assert len(psip.op_stack) == 2 #checking to see if they get put back in stack

@@ -639,6 +639,28 @@ def not_operation():
         raise TypeMismatch("Not enough arguments in stack")
     
 dict_stack[-1]["not"] = not_operation
+
+#Performing bitwise and logical 'or' depending if input is integer or boolean
+def or_operation():
+    if (len(op_stack) >= 2):
+        var2 = op_stack.pop()
+        var1 = op_stack.pop()
+        
+        if(isinstance(var1, int) and isinstance(var2, int)):
+            res = var1 | var2
+            op_stack.append(res)
+        elif (isinstance(var1, bool) and isinstance(var2, bool)):
+            res = var1 or var2
+            op_stack.append(res)
+        else: #different types than what and can do, put back in stack and raise exception
+            op_stack.append(var1)
+            op_stack.append(var2)
+            raise TypeMismatch("Not matching inputs or not of type int or bool")
+            
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+    
+dict_stack[-1]["or"] = or_operation
 #########################   Bit & Bool Operations End ###################################
 
 def process_input(user_input):
