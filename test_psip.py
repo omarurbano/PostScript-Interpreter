@@ -631,3 +631,30 @@ def testing_and_operation():
     psip.process_input("(Hello)")
     psip.process_input("and")
     assert len(psip.op_stack) == 2 #checking to see if they get put back in stack
+
+#Testing logical and bitwise not operation
+def testing_not_operation():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("not")
+    assert psip.op_stack[-1] == -2
+
+    psip.op_stack.clear()
+    psip.process_input("-4")
+    psip.process_input("not")
+    assert psip.op_stack[-1] == 3
+
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("not")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("false")
+    psip.process_input("not")
+    assert psip.op_stack[-1] == True
+
+    psip.op_stack.clear()
+    psip.process_input("(Hi)")
+    psip.process_input("not")
+    assert len(psip.op_stack) == 1 #not valid input, number of inputs in stack remains the same

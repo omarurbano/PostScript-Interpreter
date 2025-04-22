@@ -622,6 +622,23 @@ def and_operation():
         raise TypeMismatch("Not enough arguments in stack")
     
 dict_stack[-1]["and"] = and_operation
+
+#Performing bitwise not on integer inputs, and logical not on bools
+def not_operation():
+    if (len(op_stack) >= 1):
+        var = op_stack.pop()
+
+        if(isinstance(var, bool)):
+            op_stack.append(not var)
+        elif (isinstance(var, int)):
+            op_stack.append(~var)
+        else: #different types than what and can do, put back in stack and raise exception
+            op_stack.append(var)
+            raise TypeMismatch("Not valid input type")
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+    
+dict_stack[-1]["not"] = not_operation
 #########################   Bit & Bool Operations End ###################################
 
 def process_input(user_input):
