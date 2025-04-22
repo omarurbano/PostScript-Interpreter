@@ -516,4 +516,29 @@ def testing_ge():
     psip.process_input("ge")
     assert psip.op_stack[-1] == True
 
+#Testing greater than operation, compares two inputs to see if one is greater than the other
+def testing_gt():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("gt")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("2")
+    psip.process_input("gt")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("(Omar)")
+    psip.process_input("(Omar)")
+    psip.process_input("gt")
+    assert psip.op_stack[-1] == False
+
+    psip.op_stack.clear()
+    psip.process_input("(O)")
+    psip.process_input("()")
+    psip.process_input("gt")
+    assert psip.op_stack[-1] == True
     
