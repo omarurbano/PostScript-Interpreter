@@ -65,7 +65,10 @@ def process_number(input):
 def process_code_block(input):
     logging.debug(f"Input to process number: {input}")
     if len(input) >= 2 and input.startswith("{") and input.endswith("}"):
-        return input[1: -1].strip().split()
+            if(input[1: -1].startswith("(") and input[1:-1].endswith(")")): #if inner code contains a string only, needed for conditional
+                return input[1:-1]
+            else:
+                return input[1: -1].strip().split()
     else:
         raise ParseFailed("Can't parse this into a code block")
 
@@ -108,7 +111,7 @@ def process_constants(input):
             continue
     raise ParseFailed(f"None of the parsers worked for the input {input}")
 
-######## Arithmetic Operations start ##################
+############################## Arithmetic Operations start #################################
 def add_operation():
     if(len(op_stack) >= 2):
         op1 = op_stack.pop()
@@ -291,6 +294,9 @@ dict_stack[-1]["def"] = def_operation
 def pop_and_print():
     if(len(op_stack) >= 1):
         op1 = op_stack.pop()
+        if isinstance(op1, str): #take out parenthesis of strings
+            if (op1.startswith("(") and op1.endswith(")")):
+                op1 = op1[1:-1]
         print(op1)
     else:
         raise StackEmpty("Stack is empty! Nothing to print")
@@ -662,6 +668,25 @@ def or_operation():
     
 dict_stack[-1]["or"] = or_operation
 #########################   Bit & Bool Operations End ###################################
+
+#########################   Flow Control Operations Begin ###############################
+def if_operation(): #need more testing for this
+    if (len(op_stack) >= 2):
+        output = op_stack.pop()
+        bool_var = op_stack.pop()
+
+        if (isinstance(output, str) and isinstance(bool_var, bool)):
+            if(bool_var):
+                output = output[1:len(output) - 1]
+                op_stack.append(output.strip())
+        else:
+            raise TypeMismatch("Not valid arguments in stack")
+        
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+
+dict_stack[-1]["if"] = if_operation
+#########################   Flow Control Operations End #################################
 
 def process_input(user_input):
     #print(user_input)

@@ -659,7 +659,7 @@ def testing_not_operation():
     psip.process_input("not")
     assert len(psip.op_stack) == 1 #not valid input, number of inputs in stack remains the same
 
-    #testing logical 'or' and bitwise 'or' to see if we get expected outputs
+#testing logical 'or' and bitwise 'or' to see if we get expected outputs
 def testing_or_operation():
     psip.op_stack.clear()
     psip.process_input("true")
@@ -696,3 +696,10 @@ def testing_or_operation():
     psip.process_input("(Hello)")
     psip.process_input("or")
     assert len(psip.op_stack) == 2 #checking to see if they get put back in stack
+
+def if_operation():
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("{(bool is true, this top stack)}")
+    psip.process_input("if")
+    assert psip.op_stack[-1] == 1
