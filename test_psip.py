@@ -728,3 +728,40 @@ def testing_ifelse_operation():
     psip.process_input("{(bool is true)}")
     psip.process_input("ifelse")
     assert psip.op_stack[-1] == "(bool is false)"
+
+#Testing for operation to mimic a loop. first input is intial value, second value is how much
+#to increment, third is how many times to do it, and fourth is code block. Testing to see that
+#it follows how postscript would do it
+def testing_for_operation():
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("100000")
+    psip.process_input("{}")
+    psip.process_input("for")
+    assert len(psip.op_stack) == 100000
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("0")
+    psip.process_input("{}")
+    psip.process_input("for")
+    assert len(psip.op_stack) == 0 #nothing is processed
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("5")
+    psip.process_input("{1 2 add =}")
+    psip.process_input("for")
+    assert len(psip.op_stack) == 5 #add result gets popped out, only i gets added to stack
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("1")
+    psip.process_input("5")
+    psip.process_input("{(Hello)}")
+    psip.process_input("for")
+    assert len(psip.op_stack) == 10 #everything gets added
+

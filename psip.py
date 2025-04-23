@@ -674,7 +674,9 @@ dict_stack[-1]["or"] = or_operation
 #########################   Bit & Bool Operations End ###################################
 
 #########################   Flow Control Operations Begin ###############################
-def if_operation(): #need more testing for this
+
+#If conditional, if true will run code block, else nothing happens, stack gets emptied
+def if_operation(): 
     if (len(op_stack) >= 2):
         output = op_stack.pop()
         bool_var = op_stack.pop()
@@ -693,6 +695,7 @@ def if_operation(): #need more testing for this
 
 dict_stack[-1]["if"] = if_operation
 
+#if true, will run one code block, else if will run the other code block
 def ifelse_operation():
     if (len(op_stack) >= 3):
         outputTrue = op_stack.pop()
@@ -721,6 +724,32 @@ def ifelse_operation():
         raise TypeMismatch("Not enough arguments in stack")
 
 dict_stack[-1]["ifelse"] = ifelse_operation
+
+# j is the intial value, k is the increment, l is the limit, proc is code block, for loop
+def for_operation():
+    if (len(op_stack) >= 4): #need j,k,l,procedure
+        codeBlock = op_stack.pop()
+        limit = op_stack.pop()
+        increment = op_stack.pop()
+        i = op_stack.pop()
+
+        if (increment > 0): # postive increment
+            for num in range(limit):
+                process_input(i)
+                for j in codeBlock:
+                    process_input(j)
+                i += increment
+        else: #negative increment
+            for num in range(i):
+                process_input(i)
+                for j in codeBlock:
+                    process_input(j)
+                i += increment
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+
+dict_stack[-1]["for"] = for_operation
+
 #########################   Flow Control Operations End #################################
 
 def process_input(user_input):
