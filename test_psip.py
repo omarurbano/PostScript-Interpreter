@@ -697,6 +697,8 @@ def testing_or_operation():
     psip.process_input("or")
     assert len(psip.op_stack) == 2 #checking to see if they get put back in stack
 
+#Testing if conditional, if true will add whats inside code block to the top of stack, 
+#otherwise stack will be emtpy.
 def testing_if_operation():
     psip.op_stack.clear()
     psip.process_input("true")
@@ -709,3 +711,20 @@ def testing_if_operation():
     psip.process_input("{(bool is true, this top stack)}")
     psip.process_input("if")
     assert len(psip.op_stack) == 0
+
+#Testing if else conditional, if true will add whats inside code block to the top of stack, 
+#otherwise add the other code block.
+def testing_ifelse_operation():
+    psip.op_stack.clear()
+    psip.process_input("true")
+    psip.process_input("{(bool is false)}")
+    psip.process_input("{(bool is true)}")
+    psip.process_input("ifelse")
+    assert psip.op_stack[-1] == "bool is true"
+
+    psip.op_stack.clear()
+    psip.process_input("false")
+    psip.process_input("{(bool is false)}")
+    psip.process_input("{(bool is true)}")
+    psip.process_input("ifelse")
+    assert psip.op_stack[-1] == "bool is false"

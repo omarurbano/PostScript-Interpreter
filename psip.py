@@ -686,6 +686,27 @@ def if_operation(): #need more testing for this
         raise TypeMismatch("Not enough arguments in stack")
 
 dict_stack[-1]["if"] = if_operation
+
+def ifelse_operation():
+    if (len(op_stack) >= 3):
+        outputTrue = op_stack.pop()
+        outputFalse = op_stack.pop()
+        bool_var = op_stack.pop()
+
+        if (isinstance(outputTrue, str) and isinstance(outputFalse, str) and isinstance(bool_var, bool)):
+            if(bool_var):
+                outputTrue = outputTrue[1:len(outputTrue) - 1]
+                op_stack.append(outputTrue.strip())
+            else:
+                outputFalse = outputFalse[1:len(outputFalse) - 1]
+                op_stack.append(outputFalse.strip())
+        else:
+            raise TypeMismatch("Not valid arguments in stack")
+        
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+
+dict_stack[-1]["ifelse"] = ifelse_operation
 #########################   Flow Control Operations End #################################
 
 def process_input(user_input):
