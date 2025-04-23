@@ -697,9 +697,15 @@ def testing_or_operation():
     psip.process_input("or")
     assert len(psip.op_stack) == 2 #checking to see if they get put back in stack
 
-def if_operation():
+def testing_if_operation():
     psip.op_stack.clear()
     psip.process_input("true")
     psip.process_input("{(bool is true, this top stack)}")
     psip.process_input("if")
-    assert psip.op_stack[-1] == 1
+    assert psip.op_stack[-1] == "bool is true, this top stack"
+
+    psip.op_stack.clear()
+    psip.process_input("false")
+    psip.process_input("{(bool is true, this top stack)}")
+    psip.process_input("if")
+    assert len(psip.op_stack) == 0
