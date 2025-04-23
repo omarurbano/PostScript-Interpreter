@@ -704,7 +704,7 @@ def testing_if_operation():
     psip.process_input("true")
     psip.process_input("{(bool is true, this top stack)}")
     psip.process_input("if")
-    assert psip.op_stack[-1] == "bool is true, this top stack"
+    assert psip.op_stack[-1] == "(bool is true, this top stack)"
 
     psip.op_stack.clear()
     psip.process_input("false")
@@ -720,11 +720,11 @@ def testing_ifelse_operation():
     psip.process_input("{(bool is false)}")
     psip.process_input("{(bool is true)}")
     psip.process_input("ifelse")
-    assert psip.op_stack[-1] == "bool is true"
+    assert psip.op_stack[-1] == "(bool is true)"
 
     psip.op_stack.clear()
     psip.process_input("false")
     psip.process_input("{(bool is false)}")
     psip.process_input("{(bool is true)}")
     psip.process_input("ifelse")
-    assert psip.op_stack[-1] == "bool is false"
+    assert psip.op_stack[-1] == "(bool is false)"

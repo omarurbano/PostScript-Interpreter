@@ -1,5 +1,6 @@
 import logging
 import math
+import re
 logging.basicConfig(level = logging.DEBUG) #INFO, DEBUG
 
 op_stack = []
@@ -65,10 +66,13 @@ def process_number(input):
 def process_code_block(input):
     logging.debug(f"Input to process number: {input}")
     if len(input) >= 2 and input.startswith("{") and input.endswith("}"):
-            if(input[1: -1].startswith("(") and input[1:-1].endswith(")")): #if inner code contains a string only, needed for conditional
-                return input[1:-1]
-            else:
-                return input[1: -1].strip().split()
+            # if(input[1: -1].startswith("(") and input[1:-1].endswith(")")): #if inner code contains a string only, needed for conditional
+            #     return input[1:-1]
+            # else:
+            rInner = re.findall(r'\([^\)]+\)|=|\S+', input[1:-1])
+            print(f"this is rInner: {rInner}")
+            print(f"This is input{input[1: -1].strip().split()}")
+            return rInner#input[1: -1].strip().split()
     else:
         raise ParseFailed("Can't parse this into a code block")
 
@@ -674,11 +678,13 @@ def if_operation(): #need more testing for this
     if (len(op_stack) >= 2):
         output = op_stack.pop()
         bool_var = op_stack.pop()
+        print(f"This is output {output}")
+        print(type(output))
+    
 
-        if (isinstance(output, str) and isinstance(bool_var, bool)):
-            if(bool_var):
-                output = output[1:len(output) - 1]
-                op_stack.append(output.strip())
+        if(bool_var):
+            for i in output:
+                process_input(i)
         else:
             raise TypeMismatch("Not valid arguments in stack")
         
@@ -693,15 +699,23 @@ def ifelse_operation():
         outputFalse = op_stack.pop()
         bool_var = op_stack.pop()
 
-        if (isinstance(outputTrue, str) and isinstance(outputFalse, str) and isinstance(bool_var, bool)):
-            if(bool_var):
-                outputTrue = outputTrue[1:len(outputTrue) - 1]
-                op_stack.append(outputTrue.strip())
-            else:
-                outputFalse = outputFalse[1:len(outputFalse) - 1]
-                op_stack.append(outputFalse.strip())
+        if(bool_var):
+            for i in outputTrue:
+                process_input(i)
+        elif (bool_var == False):
+            for j in outputFalse:
+                process_input(j)
         else:
             raise TypeMismatch("Not valid arguments in stack")
+        # if (isinstance(outputTrue, str) and isinstance(outputFalse, str) and isinstance(bool_var, bool)):
+        #     if(bool_var):
+        #         outputTrue = outputTrue[1:len(outputTrue) - 1]
+        #         op_stack.append(outputTrue.strip())
+        #     else:
+        #         outputFalse = outputFalse[1:len(outputFalse) - 1]
+        #         op_stack.append(outputFalse.strip())
+        # else:
+        #     raise TypeMismatch("Not valid arguments in stack")
         
     else:
         raise TypeMismatch("Not enough arguments in stack")
