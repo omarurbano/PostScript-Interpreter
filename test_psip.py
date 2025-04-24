@@ -796,12 +796,12 @@ def testing_dict_operation():
     psip.op_stack.clear()
     psip.process_input("4")
     psip.process_input("dict")
-    assert isinstance(psip.op_stack[-1], dict) == True
+    assert isinstance(psip.op_stack[-1], psip.DictNode) == True
 
     psip.op_stack.clear()
     psip.process_input("-1")
     psip.process_input("dict")
-    assert isinstance(psip.op_stack[-1], dict) == False
+    assert isinstance(psip.op_stack[-1], psip.DictNode) == False
 
 #Getting length of current dictionary at the top of the stack, need to expand once i get other methods in
 def testing_dict_length():

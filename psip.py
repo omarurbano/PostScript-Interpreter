@@ -37,26 +37,50 @@ class NotAnIntegerArg(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+class DictNode:
+    def __init__(self, limit, definedDict):
+        self.mDict = {}
+        self.count = 0
+        self.limit = limit
+        self.definedDict = definedDict
+        logging.debug(f"Dict created with {limit} limit")
+
+    def insert(self, key, value):
+        self.mDict[key] = value
+        self.count += 1
+    
+    def remove(self, key):
+        self.mDict.pop(key)
+        self.count -= 1
+
+    def count(self):
+        return self.count
+    
+    def __repr__(self):
+        return "--dict--"
+
 #Node Class to store a dictionary
 class DictList:
     def __init__(self):
         self.gList = []
-        self.count = 0
-        self.definedDict = {}
     
     def insertDict(self, newDict):
         self.gList.append(newDict)
-        self.count += 1
-        self.definedDict = dict_stack[-1]
     
     def popDict(self):
         if (self.count != 0):
             self.gList.pop()
-            self.count -= 1
 
     def accessPrev(self, currIndex):
         if (currIndex >= 0):
             return self.gList[currIndex]
+    
+    # def find(self, currDict):
+    #     for d in self.gList:
+    #         if d == currDict:
+    #             return d
+
+    #     return False     
         
 dict_tracker = DictList()
 dict_tracker.insertDict((dict_stack[-1]))
@@ -462,27 +486,33 @@ def lookup_in_dictionary(input):#modify this
     
 def dict_operation():
     if (len(op_stack) > 0):
-        num = -1
-        if (isinstance((op_stack[-1]), int)):
-            num = op_stack.pop()
-            if (num >= 0):
-                mDict = {}
-                dict_tracker.insertDict(mDict)
-                op_stack.append(mDict)
-            else:
-                op_stack.append(num)
+        num = op_stack.pop()
+        print(num)
+        if (num >= 0):
+            nDict = DictNode(num, dict_stack[-1])
+            dict_tracker.insertDict(nDict)
+            op_stack.append(nDict)
+        else:
+            op_stack.append(num) #put number back in stack
     else:
         raise StackEmpty("Stack is empty, unable to create dictionary!")
 
 dict_stack[-1]["dict"] = dict_operation
 
 def dict_length_op():
-    if dict_stack[-1]:
+    if (isinstance(dict_stack[-1], dict)):
         op_stack.append(len(dict_stack[-1]))
+    elif (isinstance(dict_stack[-1], DictNode)):
+        op_stack.append(dict_stack[-1].count())
     else: #empty will add 0 to stack
         op_stack.append(0)
     
 dict_stack[-1]["dict length"] = dict_length_op
+
+# def dict_maxlength_op():
+#     for d in dict_tracker.gList:
+#         if (dict_stack[-1] == d):
+#             op_stack.append()
 
 #def begin_operation():
 
