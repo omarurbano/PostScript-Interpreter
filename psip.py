@@ -475,7 +475,15 @@ def dict_operation():
         raise StackEmpty("Stack is empty, unable to create dictionary!")
 
 dict_stack[-1]["dict"] = dict_operation
+
+def dict_length_op():
+    if dict_stack[-1]:
+        op_stack.append(len(dict_stack[-1]))
+    else: #empty will add 0 to stack
+        op_stack.append(0)
     
+dict_stack[-1]["dict length"] = dict_length_op
+
 #def begin_operation():
 
     #......

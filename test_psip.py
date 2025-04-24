@@ -802,3 +802,9 @@ def testing_dict_operation():
     psip.process_input("-1")
     psip.process_input("dict")
     assert isinstance(psip.op_stack[-1], dict) == False
+
+#Getting length of current dictionary at the top of the stack, need to expand once i get other methods in
+def testing_dict_length():
+    psip.op_stack.clear() 
+    psip.process_input("dict length")
+    assert psip.op_stack[-1] > 0
