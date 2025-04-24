@@ -324,7 +324,7 @@ dict_stack[-1]["="] = pop_and_print
 def pop_and_print2():
     if(len(op_stack) >= 1):
         op1 = op_stack.pop()
-        
+
         if isinstance(op1, list):
             res = "{"
             for item in op1:
@@ -541,6 +541,21 @@ def strPutInterval():
         raise TypeMismatch("Not enough arguments in stack")
     
 dict_stack[-1]["putinterval"] = strPutInterval
+
+#Operation pops and prints strings in postscript only
+def print_operation():
+    if (len(op_stack) >= 1):
+        string = op_stack.pop()
+
+        if(isinstance(string, str)):
+            if(string.startswith("(") and string.endswith(")")): #only printing if starts with parenthesis
+                print(string[1:-1])
+            else:
+                op_stack.append(string) #put back in stack not a string value in postscript
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+    
+dict_stack[-1]["print"] = print_operation
 ######################### String Operations End #########################################
 
 #########################   Bit & Bool Operations Begin #################################
