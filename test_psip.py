@@ -790,3 +790,15 @@ def testing_repeat_operation():
     psip.process_input("{1 3 add 3 sub 100 mul}")
     psip.process_input("repeat")
     assert len(psip.op_stack) == 0
+
+#Testing if a dictionary gets added to the stack with the dict keyword
+def testing_dict_operation():
+    psip.op_stack.clear()
+    psip.process_input("4")
+    psip.process_input("dict")
+    assert isinstance(psip.op_stack[-1], dict) == True
+
+    psip.op_stack.clear()
+    psip.process_input("-1")
+    psip.process_input("dict")
+    assert isinstance(psip.op_stack[-1], dict) == False

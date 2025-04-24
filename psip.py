@@ -8,6 +8,8 @@ op_stack = []
 dict_stack = []
 dict_stack.append({})
 
+
+
 class ParseFailed(Exception):
     """Exception while parsing"""
     def __init__(self, message):
@@ -34,6 +36,30 @@ class NotAnIntegerArg(Exception):
     """operations that require int's as arguments"""
     def __init__(self, message):
         super().__init__(message)
+
+#Node Class to store a dictionary
+class DictList:
+    def __init__(self):
+        self.gList = []
+        self.count = 0
+        self.definedDict = {}
+    
+    def insertDict(self, newDict):
+        self.gList.append(newDict)
+        self.count += 1
+        self.definedDict = dict_stack[-1]
+    
+    def popDict(self):
+        if (self.count != 0):
+            self.gList.pop()
+            self.count -= 1
+
+    def accessPrev(self, currIndex):
+        if (currIndex >= 0):
+            return self.gList[currIndex]
+        
+dict_tracker = DictList()
+dict_tracker.insertDict((dict_stack[-1]))
 
 def repl():
     while True:
@@ -91,11 +117,18 @@ def process_string_input(input):
         raise ParseFailed("Can't parse into string")
 
 def process_list_input(input):
-    logging.debug(f"Input to process string: {input}")
+    logging.debug(f"Input to process list: {input}")
     if input.startswith("["):
         return input
     else:
         raise ParseFailed("Can't parse into list")
+    
+# def process_dict_input(input):
+#     logging.debug(f"Input to process dict: {input}")
+#     if isinstance(input, dict):
+#         return input
+#     else:
+#         raise ParseFailed("Can't parse into dict")
 
 PARSERS = [
     process_boolean,
@@ -103,7 +136,8 @@ PARSERS = [
     process_code_block,
     process_name_constant,
     process_string_input,
-    process_list_input
+    process_list_input,
+    #process_dict_input
 
 ]
 
@@ -429,17 +463,25 @@ def lookup_in_dictionary(input):#modify this
 def dict_operation():
     if (len(op_stack) > 0):
         num = -1
-        if (str.isdigit(op_stack[-1])):
+        if (isinstance((op_stack[-1]), int)):
             num = op_stack.pop()
-            dict_stack.insert(0, {})
-            # dict_stack.append({})
-            # dict_stack[-1]["maxSize"] = num
-            # dict_stack[-1]["currSize"] = 0
-            # op_stack.append("--dict--")
-        
-    
+            if (num >= 0):
+                mDict = {}
+                dict_tracker.insertDict(mDict)
+                op_stack.append(mDict)
+            else:
+                op_stack.append(num)
     else:
         raise StackEmpty("Stack is empty, unable to create dictionary!")
+
+dict_stack[-1]["dict"] = dict_operation
+    
+#def begin_operation():
+
+    #......
+
+    
+#dict_stack[-1]["begin"] = begin_operation
     
 ######################### Dictionary Operations End #####################################
     
@@ -810,13 +852,6 @@ def repeat_operation():
 dict_stack[-1]["repeat"] = repeat_operation
 
 #########################   Flow Control Operations End #################################
-
-#def begin_operation():
-
-    #......
-
-    
-#dict_stack[-1]["begin"] = begin_operation
 
 def process_input(user_input):
     #print(user_input)
