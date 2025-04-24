@@ -765,3 +765,28 @@ def testing_for_operation():
     psip.process_input("for")
     assert len(psip.op_stack) == 10 #everything gets added
 
+#Testing repeat operation, seeing it it processes correctly and we get the expected output
+def testing_repeat_operation():
+    psip.op_stack.clear()
+    psip.process_input("10")
+    psip.process_input("{10}")
+    psip.process_input("repeat")
+    assert len(psip.op_stack) == 10
+
+    psip.op_stack.clear()
+    psip.process_input("1")
+    psip.process_input("{1 3 add 3 sub}")
+    psip.process_input("repeat")
+    assert len(psip.op_stack) == 1
+
+    psip.op_stack.clear()
+    psip.process_input("0")
+    psip.process_input("{1 3 add 3 sub 100 mul}")
+    psip.process_input("repeat")
+    assert len(psip.op_stack) == 0
+
+    psip.op_stack.clear()
+    psip.process_input("-1")
+    psip.process_input("{1 3 add 3 sub 100 mul}")
+    psip.process_input("repeat")
+    assert len(psip.op_stack) == 0

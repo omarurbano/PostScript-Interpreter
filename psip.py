@@ -381,7 +381,7 @@ dict_stack[-1]["copy"] = copy_operation
 #This is what will go through and check the dictionary to see if it is callable
 #If it is not callable, then it will check the instance, and process input,
 #otherwise it is a value and will append to the stack.
-def lookup_in_dictionary(input):
+def lookup_in_dictionary(input):#modify this
     top_dict = dict_stack[-1]
     if input in top_dict:
         value = top_dict[input]
@@ -750,7 +750,28 @@ def for_operation():
 
 dict_stack[-1]["for"] = for_operation
 
+def repeat_operation():
+    if (len(op_stack) >= 2): 
+        codeBlock = op_stack.pop()
+        iterations = op_stack.pop()
+        
+        if (iterations.is_integer() and iterations >= 0):
+            for i in range(iterations):
+                for items in codeBlock:
+                    process_input(items)
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+
+dict_stack[-1]["repeat"] = repeat_operation
+
 #########################   Flow Control Operations End #################################
+
+#def begin_operation():
+
+    #......
+
+    
+#dict_stack[-1]["begin"] = begin_operation
 
 def process_input(user_input):
     #print(user_input)
