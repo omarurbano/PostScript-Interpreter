@@ -90,12 +90,20 @@ def process_string_input(input):
     else:
         raise ParseFailed("Can't parse into string")
 
+def process_list_input(input):
+    logging.debug(f"Input to process string: {input}")
+    if input.startswith("["):
+        return input
+    else:
+        raise ParseFailed("Can't parse into list")
+
 PARSERS = [
     process_boolean,
     process_number,
     process_code_block,
     process_name_constant,
-    process_string_input
+    process_string_input,
+    process_list_input
 
 ]
 
@@ -301,11 +309,33 @@ def pop_and_print():
         if isinstance(op1, str): #take out parenthesis of strings
             if (op1.startswith("(") and op1.endswith(")")):
                 op1 = op1[1:-1]
-        print(op1)
+                print(op1)
+            elif (op1.startswith("[") and op1.endswith("]")): #refers to list
+                print("--nostringval--")
+        elif isinstance(op1, list): #refers to codeblocks
+            print("--nostringval--")
+        else:
+            print(op1)
     else:
         raise StackEmpty("Stack is empty! Nothing to print")
 
 dict_stack[-1]["="] = pop_and_print
+
+def pop_and_print2():
+    if(len(op_stack) >= 1):
+        op1 = op_stack.pop()
+        
+        if isinstance(op1, list):
+            res = "{"
+            for item in op1:
+                res += f"{item} "
+            res = res[0:-1] + "}"
+            print(res)
+        else:
+            print(op1)
+    else:
+        raise StackEmpty("Stack is empty! Nothing to print")
+dict_stack[-1]["=="] = pop_and_print2
 
 def exch_operation():
     if (len(op_stack) >= 2):
@@ -754,7 +784,7 @@ def repeat_operation():
     if (len(op_stack) >= 2): 
         codeBlock = op_stack.pop()
         iterations = op_stack.pop()
-        
+
         if (iterations.is_integer() and iterations >= 0):
             for i in range(iterations):
                 for items in codeBlock:
