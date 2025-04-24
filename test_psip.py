@@ -808,3 +808,9 @@ def testing_dict_length():
     psip.op_stack.clear() 
     psip.process_input("dict length")
     assert psip.op_stack[-1] > 0
+
+#Getting max length of current dictionary at the top of the stack
+def testing_dict_maxlength():
+    psip.op_stack.clear() 
+    psip.process_input("dict maxlength") #main dictionary 
+    assert psip.op_stack[-1] == 200

@@ -509,11 +509,16 @@ def dict_length_op():
     
 dict_stack[-1]["dict length"] = dict_length_op
 
-# def dict_maxlength_op():
-#     for d in dict_tracker.gList:
-#         if (dict_stack[-1] == d):
-#             op_stack.append()
-
+def dict_maxlength_op():
+    if (isinstance(dict_stack[-1], dict)):
+        op_stack.append(200)
+    elif (isinstance(dict_stack[-1], DictNode)):
+       op_stack.append(dict_stack[-1].limit)
+    else:
+        raise Exception("Error finding dictionary!")
+    
+dict_stack[-1]["dict maxlength"] = dict_maxlength_op
+    
 #def begin_operation():
 
     #......
