@@ -875,3 +875,19 @@ def testing_dict_begin():
     assert psip.dict_stack[-1].count() == 0
     psip.dict_stack.pop()
 
+#Testing to see if end pops out dictionary we made
+def testing_dict_end():
+    psip.op_stack.clear() 
+    psip.process_input("3")
+    psip.process_input("dict")
+    psip.process_input("begin")
+    assert psip.dict_stack[-1].limit == 3 #dictionary we made
+    assert psip.dict_stack[-1].count() == 0
+    psip.process_input("end")
+    assert psip.dict_stack[-1].limit == 200 #Parent dictionary
+    assert psip.dict_stack[-1].count() > 40
+
+    psip.op_stack.clear() 
+    psip.process_input("end")
+    assert psip.dict_stack[-1].limit == 200 #Parent dictionary should not be popped off
+    assert psip.dict_stack[-1].count() > 40

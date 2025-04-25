@@ -544,16 +544,22 @@ dict_stack[-1]["currentdict maxlength"] = dict_currentmaxlength_op
 def dict_begin_op():
     if (len(op_stack) > 0):
         newdict = op_stack.pop()
-        print(f"Length before begin: {len(dict_stack)}")
         if (isinstance(newdict, DictNode)):
             dict_stack.append(newdict)
-            print(f"Length after begin: {len(dict_stack)}")
         else:
             op_stack.append(newdict) #Not a dictionary in top of opstack
     else:
         raise StackEmpty("Stack is empty, unable to begin dictionary!")
   
 dict_stack[-1]["begin"] = dict_begin_op
+
+#removing current dictionary from dict stack, op stack can be empty, cannot remove parent dictionary, hence, greater than 1
+def dict_end_op():
+    if (len(dict_stack) > 1):
+        dict_stack.pop() 
+    else:
+        raise StackEmpty("Attempting to pop parent dictionary, cannot pop this!")
+dict_stack[-1]["end"] = dict_end_op
     
 ######################### Dictionary Operations End #####################################
     
