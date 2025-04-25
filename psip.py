@@ -4,10 +4,43 @@ import re
 logging.basicConfig(level = logging.DEBUG) #INFO, DEBUG
 
 op_stack = []
-
 dict_stack = []
-dict_stack.append({})
+isDynamic = True
 
+class DictNode:
+    def __init__(self, limit, definedDict):
+        self.mDict = {}
+        self.limit = limit
+        self.definedDict = definedDict
+        logging.debug(f"Dict created with {limit} limit")
+
+    # def insert(self, key, value):
+    #     self.mDict[key] = value
+    #     self.count += 1
+    
+    # def remove(self, key):
+    #     self.mDict.pop(key)
+    #     self.count -= 1
+
+    def count(self):
+        return len(self.mDict)
+    
+    def __getitem__(self, key):
+        return self.mDict[key]
+
+    def __setitem__(self, key, value):
+        self.mDict[key] = value
+
+    def __delitem__(self, key):
+        del self.mDict[key]
+
+    def __contains__(self, key):
+        return key in self.mDict
+    
+    def __repr__(self):
+        return "--dict--"
+
+dict_stack.append(DictNode(200, None))
 
 
 class ParseFailed(Exception):
@@ -36,54 +69,6 @@ class NotAnIntegerArg(Exception):
     """operations that require int's as arguments"""
     def __init__(self, message):
         super().__init__(message)
-
-class DictNode:
-    def __init__(self, limit, definedDict):
-        self.mDict = {}
-        self.count = 0
-        self.limit = limit
-        self.definedDict = definedDict
-        logging.debug(f"Dict created with {limit} limit")
-
-    def insert(self, key, value):
-        self.mDict[key] = value
-        self.count += 1
-    
-    def remove(self, key):
-        self.mDict.pop(key)
-        self.count -= 1
-
-    def count(self):
-        return self.count
-    
-    def __repr__(self):
-        return "--dict--"
-
-#Node Class to store a dictionary
-class DictList:
-    def __init__(self):
-        self.gList = []
-    
-    def insertDict(self, newDict):
-        self.gList.append(newDict)
-    
-    def popDict(self):
-        if (self.count != 0):
-            self.gList.pop()
-
-    def accessPrev(self, currIndex):
-        if (currIndex >= 0):
-            return self.gList[currIndex]
-    
-    # def find(self, currDict):
-    #     for d in self.gList:
-    #         if d == currDict:
-    #             return d
-
-    #     return False     
-        
-dict_tracker = DictList()
-dict_tracker.insertDict((dict_stack[-1]))
 
 def repl():
     while True:
@@ -147,12 +132,6 @@ def process_list_input(input):
     else:
         raise ParseFailed("Can't parse into list")
     
-# def process_dict_input(input):
-#     logging.debug(f"Input to process dict: {input}")
-#     if isinstance(input, dict):
-#         return input
-#     else:
-#         raise ParseFailed("Can't parse into dict")
 
 PARSERS = [
     process_boolean,
@@ -161,8 +140,6 @@ PARSERS = [
     process_name_constant,
     process_string_input,
     process_list_input,
-    #process_dict_input
-
 ]
 
 def process_constants(input):
@@ -469,10 +446,31 @@ dict_stack[-1]["copy"] = copy_operation
 #This is what will go through and check the dictionary to see if it is callable
 #If it is not callable, then it will check the instance, and process input,
 #otherwise it is a value and will append to the stack.
+# def lookup_in_dictionary_dynamic(input, dstack = dict_stack):#modify this
+#     #if(dict_stack is []):
+#         #// throw exception
+#     #top_dict = dict_stack[-1]
+#     if input in top_dict: #Right here is where we iterate through maybe do a while loop with flag or until we reach beginning, have a flag set to dynamic so we can extend it to lexical once we are done
+#         value = top_dict[input]
+#         if callable(value):
+#             value()
+#         elif isinstance(value, list):
+#             for item in value:
+#                 process_input(item)
+
+#         else:
+#             op_stack.append(value)
+#     else:
+#         #recursively call lookup in dictionary (pass in the dict stack except the last item)
+#         #aise ParseFailed(f"Input {input} is not in dictionary")
+
+# #def lookup_in_dictionary_static:
+
 def lookup_in_dictionary(input):#modify this
     top_dict = dict_stack[-1]
     if input in top_dict:
         value = top_dict[input]
+        print(value)
         if callable(value):
             value()
         elif isinstance(value, list):
@@ -483,15 +481,14 @@ def lookup_in_dictionary(input):#modify this
             op_stack.append(value)
     else:
         raise ParseFailed(f"Input {input} is not in dictionary")
+
     
 def dict_operation():
     if (len(op_stack) > 0):
         num = op_stack.pop()
-        print(num)
         if (num >= 0):
-            nDict = DictNode(num, dict_stack[-1])
-            dict_tracker.insertDict(nDict)
-            op_stack.append(nDict)
+            newDict = DictNode(num, dict_stack[-1])
+            op_stack.append(newDict)
         else:
             op_stack.append(num) #put number back in stack
     else:
@@ -499,32 +496,61 @@ def dict_operation():
 
 dict_stack[-1]["dict"] = dict_operation
 
+#Shares length with string, in string op checks for instances and calls this function
 def dict_length_op():
-    if (isinstance(dict_stack[-1], dict)):
-        op_stack.append(len(dict_stack[-1]))
-    elif (isinstance(dict_stack[-1], DictNode)):
-        op_stack.append(dict_stack[-1].count())
-    else: #empty will add 0 to stack
-        op_stack.append(0)
-    
-dict_stack[-1]["dict length"] = dict_length_op
+    if (len(op_stack) > 0):
+        mDict = op_stack.pop()
+        if(isinstance(mDict, DictNode)):
+            op_stack.append(mDict.count())
+        else:
+            op_stack.append(mDict) #put number back in stack
+    else:
+        raise StackEmpty("Stack is empty, unable to create dictionary!")
 
-def dict_maxlength_op():
-    if (isinstance(dict_stack[-1], dict)):
-        op_stack.append(200)
-    elif (isinstance(dict_stack[-1], DictNode)):
-       op_stack.append(dict_stack[-1].limit)
+dict_stack[-1]["length"] = dict_length_op
+
+def dict_currentlength_op():
+    if (len(dict_stack) > 0):
+        op_stack.append(dict_stack[-1].count())
     else:
         raise Exception("Error finding dictionary!")
     
-dict_stack[-1]["dict maxlength"] = dict_maxlength_op
-    
-#def begin_operation():
+dict_stack[-1]["currentdict length"] = dict_currentlength_op
 
-    #......
+def dict_maxlength_op():
+    if (len(op_stack) > 0):
+        mDict = op_stack.pop()
+        if(isinstance(mDict, DictNode)):
+            op_stack.append(mDict.limit)
+        else:
+            op_stack.append(mDict) #put number back in stack
+    else:
+        raise StackEmpty("Stack is empty, unable to create dictionary!")
+
+dict_stack[-1]["maxlength"] = dict_maxlength_op
+
+def dict_currentmaxlength_op():
+    if (len(dict_stack) > 0):
+        op_stack.append(dict_stack[-1].limit)
+    else:
+        raise Exception("Error finding dictionary!")
+    
+dict_stack[-1]["currentdict maxlength"] = dict_currentmaxlength_op
+    
+# def dict_begin_op():
+#     if (len(op_stack) > 0):
+#         newdict = op_stack.pop()
+
+#         if (isinstance(newdict, DictNode)):
+#             dict_stack.append(newdict.mDict)
+#         else:
+#             op_stack.append(newdict)
+#     else:
+#         raise StackEmpty("Stack is empty, unable to begin dictionary!")
+#     #......
 
     
-#dict_stack[-1]["begin"] = begin_operation
+# dict_stack[-1]["begin"] = dict_begin_op
     
 ######################### Dictionary Operations End #####################################
     
@@ -532,12 +558,14 @@ dict_stack[-1]["dict maxlength"] = dict_maxlength_op
 
 #Gets the length of the string
 def strLength():
-    if (len(op_stack) > 0):
+    if (len(op_stack) > 0 and isinstance(op_stack[-1], str)):
         if op_stack[-1].startswith("(") and op_stack[-1][1] != ")": #if starts with ( and index 1 is not )
             op_stack.append(len(op_stack.pop()) - 2)
         else:
             print(op_stack[-1][1]) #means they entered () aka an empty string
             op_stack.append(0)
+    elif (len(op_stack) > 0 and isinstance(op_stack[-1], DictNode)):
+        dict_length_op()
     else:
         raise StackEmpty("Stack is empty, unable to get length of string")
 dict_stack[-1]["length"] = strLength
@@ -904,7 +932,11 @@ def process_input(user_input):
     except ParseFailed as e:
         logging.debug(e)
         try:
-            lookup_in_dictionary(user_input)
+            if (isDynamic):
+                lookup_in_dictionary(user_input)
+                # lookup_in_dictionary_dynamic(user_input)
+            # else:
+            #     lookup_in_dictionary_static(user_input)
         except Exception as e:
             logging.error(e)
 

@@ -804,13 +804,46 @@ def testing_dict_operation():
     assert isinstance(psip.op_stack[-1], psip.DictNode) == False
 
 #Getting length of current dictionary at the top of the stack, need to expand once i get other methods in
-def testing_dict_length():
+def testing_dict_currentlength():
     psip.op_stack.clear() 
-    psip.process_input("dict length")
+    psip.process_input("currentdict length")
     assert psip.op_stack[-1] > 0
 
+#Testing regular length where it consumes the dictionary and returns the count
+def testing_dict_length():
+    psip.op_stack.clear() 
+    psip.process_input("3")
+    psip.process_input("dict")
+    psip.process_input("length")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear() 
+    psip.process_input("0")
+    psip.process_input("dict")
+    psip.process_input("length")
+    assert psip.op_stack[-1] == 0
+
 #Getting max length of current dictionary at the top of the stack
+def testing_dict_currentmaxlength():
+    psip.op_stack.clear() 
+    psip.process_input("currentdict maxlength") #main dictionary 
+    assert psip.op_stack[-1] == 200
+
 def testing_dict_maxlength():
     psip.op_stack.clear() 
-    psip.process_input("dict maxlength") #main dictionary 
-    assert psip.op_stack[-1] == 200
+    psip.process_input("3")
+    psip.process_input("dict")
+    psip.process_input("maxlength")
+    assert psip.op_stack[-1] == 3
+
+    psip.op_stack.clear() 
+    psip.process_input("0")
+    psip.process_input("dict")
+    psip.process_input("maxlength")
+    assert psip.op_stack[-1] == 0
+
+    psip.op_stack.clear() 
+    psip.process_input(f"{sys.maxsize}")
+    psip.process_input("dict")
+    psip.process_input("maxlength")
+    assert psip.op_stack[-1] == sys.maxsize + 1
