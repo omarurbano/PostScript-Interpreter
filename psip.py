@@ -466,8 +466,12 @@ dict_stack[-1]["copy"] = copy_operation
 
 # #def lookup_in_dictionary_static:
 
-def lookup_in_dictionary(input):#modify this
-    top_dict = dict_stack[-1]
+def lookup_in_dictionary_dynamic(input, dstack = dict_stack):#modify this
+    
+    if(dict_stack is []):
+        raise ParseFailed(f"Input {input} is not in dictionary")
+    
+    top_dict = dstack[-1]
     if input in top_dict:
         value = top_dict[input]
         print(value)
@@ -480,7 +484,7 @@ def lookup_in_dictionary(input):#modify this
         else:
             op_stack.append(value)
     else:
-        raise ParseFailed(f"Input {input} is not in dictionary")
+        lookup_in_dictionary_dynamic(input, dstack[:-1])
 
     
 def dict_operation():
@@ -537,20 +541,19 @@ def dict_currentmaxlength_op():
     
 dict_stack[-1]["currentdict maxlength"] = dict_currentmaxlength_op
     
-# def dict_begin_op():
-#     if (len(op_stack) > 0):
-#         newdict = op_stack.pop()
-
-#         if (isinstance(newdict, DictNode)):
-#             dict_stack.append(newdict.mDict)
-#         else:
-#             op_stack.append(newdict)
-#     else:
-#         raise StackEmpty("Stack is empty, unable to begin dictionary!")
-#     #......
-
-    
-# dict_stack[-1]["begin"] = dict_begin_op
+def dict_begin_op():
+    if (len(op_stack) > 0):
+        newdict = op_stack.pop()
+        print(f"Length before begin: {len(dict_stack)}")
+        if (isinstance(newdict, DictNode)):
+            dict_stack.append(newdict)
+            print(f"Length after begin: {len(dict_stack)}")
+        else:
+            op_stack.append(newdict) #Not a dictionary in top of opstack
+    else:
+        raise StackEmpty("Stack is empty, unable to begin dictionary!")
+  
+dict_stack[-1]["begin"] = dict_begin_op
     
 ######################### Dictionary Operations End #####################################
     
@@ -933,7 +936,7 @@ def process_input(user_input):
         logging.debug(e)
         try:
             if (isDynamic):
-                lookup_in_dictionary(user_input)
+                lookup_in_dictionary_dynamic(user_input)
                 # lookup_in_dictionary_dynamic(user_input)
             # else:
             #     lookup_in_dictionary_static(user_input)

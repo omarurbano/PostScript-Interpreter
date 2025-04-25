@@ -807,7 +807,16 @@ def testing_dict_operation():
 def testing_dict_currentlength():
     psip.op_stack.clear() 
     psip.process_input("currentdict length")
-    assert psip.op_stack[-1] > 0
+    assert psip.op_stack[-1] > 40
+
+    #testing currentlength if we changed dictionaries and hit begin
+    psip.op_stack.clear() 
+    psip.process_input("3")
+    psip.process_input("dict")
+    psip.process_input("begin")
+    psip.process_input("currentdict length") #main dictionary 
+    assert psip.op_stack[-1] == 0
+    psip.dict_stack.pop()
 
 #Testing regular length where it consumes the dictionary and returns the count
 def testing_dict_length():
@@ -829,6 +838,15 @@ def testing_dict_currentmaxlength():
     psip.process_input("currentdict maxlength") #main dictionary 
     assert psip.op_stack[-1] == 200
 
+    #testing currentmax if we changed dictionaries and hit begin
+    psip.op_stack.clear() 
+    psip.process_input("3")
+    psip.process_input("dict")
+    psip.process_input("begin")
+    psip.process_input("currentdict maxlength") #main dictionary 
+    assert psip.op_stack[-1] == 3
+    psip.dict_stack.pop()
+
 def testing_dict_maxlength():
     psip.op_stack.clear() 
     psip.process_input("3")
@@ -847,3 +865,13 @@ def testing_dict_maxlength():
     psip.process_input("dict")
     psip.process_input("maxlength")
     assert psip.op_stack[-1] == sys.maxsize + 1
+
+def testing_dict_begin():
+    psip.op_stack.clear() 
+    psip.process_input("3")
+    psip.process_input("dict")
+    psip.process_input("begin")
+    assert psip.dict_stack[-1].limit == 3
+    assert psip.dict_stack[-1].count() == 0
+    psip.dict_stack.pop()
+
