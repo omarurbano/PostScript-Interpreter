@@ -5,8 +5,9 @@ logging.basicConfig(level = logging.DEBUG) #INFO, DEBUG
 
 op_stack = []
 dict_stack = []
-isDynamic = True
+isDynamic = True #This will switch the behavior of our scope - Dynamic scoping True, Static Scoping False
 
+#Class wraps the dictionary to store items like max length, and parent dictionary
 class DictNode:
     def __init__(self, limit, definedDict):
         self.mDict = {}
@@ -14,40 +15,39 @@ class DictNode:
         self.definedDict = definedDict
         logging.debug(f"Dict created with {limit} limit")
 
-    # def insert(self, key, value):
-    #     self.mDict[key] = value
-    #     self.count += 1
-    
-    # def remove(self, key):
-    #     self.mDict.pop(key)
-    #     self.count -= 1
-
+    #Returns count of dictionary
     def count(self):
         return len(self.mDict)
     
+    #returns value of dictionary
     def __getitem__(self, key):
         return self.mDict[key]
 
+    #Adds key value pair into dictionary
     def __setitem__(self, key, value):
         self.mDict[key] = value
 
+    #Removes item from dictionary
     def __delitem__(self, key):
         del self.mDict[key]
 
+    #Helps us find item in our dict_stack, so that it looks within the dictionary
     def __contains__(self, key):
         return key in self.mDict
     
+    #How it will be represented if printed
     def __repr__(self):
         return "--dict--"
 
 dict_stack.append(DictNode(200, None))
 
-
+#Did not parsed due to not impelmented
 class ParseFailed(Exception):
     """Exception while parsing"""
     def __init__(self, message):
         super().__init__(message)
 
+#Different types in arguments
 class TypeMismatch(Exception):
     """Exception with types of operators and operands"""
     def __init__(self, message):
@@ -65,11 +65,13 @@ class GreaterThanStack(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+#For operations that require an integer
 class NotAnIntegerArg(Exception):
     """operations that require int's as arguments"""
     def __init__(self, message):
         super().__init__(message)
 
+#Our repl to run program until user inputs quit
 def repl():
     while True:
         user_input = input("REPL> ")
@@ -78,6 +80,7 @@ def repl():
         process_input(user_input)
         logging.debug(f"Operand Stack: {op_stack}")
 
+#How to processes boolean inputs
 def process_boolean(input):
     logging.debug(f"Input to process boolean: {input}")
     if input == "true":
@@ -86,7 +89,8 @@ def process_boolean(input):
         return False
     else:
         raise ParseFailed("Can't parse it into boolean")
-    
+
+#How to processes number inputs
 def process_number(input):
     logging.debug(f"Input to process boolean: {input}")
     try:
@@ -98,6 +102,7 @@ def process_number(input):
     except ValueError:
         raise ParseFailed("Can't parse this into a number")
 
+#How to processes code block inputs
 def process_code_block(input):
     logging.debug(f"Input to process number: {input}")
     if len(input) >= 2 and input.startswith("{") and input.endswith("}"):
@@ -111,13 +116,15 @@ def process_code_block(input):
     else:
         raise ParseFailed("Can't parse this into a code block")
 
+#How to process name constant inputs that start with forward slash
 def process_name_constant(input):
     logging.debug(f"Input to process number: {input}")
     if input.startswith("/"):
         return input
     else:
         raise ParseFailed("Can't parse into name constant")
-    
+
+#How to process string inputs
 def process_string_input(input):
     logging.debug(f"Input to process string: {input}")
     if input.startswith("("):
@@ -125,6 +132,7 @@ def process_string_input(input):
     else:
         raise ParseFailed("Can't parse into string")
 
+#How to process List inputs
 def process_list_input(input):
     logging.debug(f"Input to process list: {input}")
     if input.startswith("["):
@@ -132,7 +140,7 @@ def process_list_input(input):
     else:
         raise ParseFailed("Can't parse into list")
     
-
+#What inputs we are able to parsered
 PARSERS = [
     process_boolean,
     process_number,
@@ -142,12 +150,8 @@ PARSERS = [
     process_list_input,
 ]
 
+#How to process constants
 def process_constants(input):
-    # try:
-    #     res = process_boolean(input)
-    #     op_stack.append(res)
-    # except ParseFailed as e:
-    #     logging.debug(e)
     for parser in PARSERS:
         try:
             result = parser(input)
@@ -159,6 +163,7 @@ def process_constants(input):
     raise ParseFailed(f"None of the parsers worked for the input {input}")
 
 ############################## Arithmetic Operations start #################################
+#Adding two numbers, result pushed to stack
 def add_operation():
     if(len(op_stack) >= 2):
         op1 = op_stack.pop()
@@ -171,6 +176,7 @@ def add_operation():
     
 dict_stack[-1]["add"] = add_operation
 
+#Subtracting two numbers, result pushed to stack
 def sub_operation():
     if(len(op_stack) >= 2):
         num1 = op_stack.pop()
@@ -183,6 +189,7 @@ def sub_operation():
     
 dict_stack[-1]["sub"] = sub_operation
 
+#Multiplying two numbers, result pushed to the stack
 def mul_operation():
     if(len(op_stack) >= 2):
         num1 = op_stack.pop()
@@ -194,6 +201,7 @@ def mul_operation():
 
 dict_stack[-1]["mul"] = mul_operation
 
+#Performing division on two integers, result pushed to the stack
 def div_operation():
     if(len(op_stack) >= 2):
         num1 = op_stack.pop()
@@ -211,6 +219,7 @@ def div_operation():
 
 dict_stack[-1]["div"] = div_operation
 
+#Performs the modulus operation on the first two items of the stack and pushes result to the stack
 def mod_operation():
     if(len(op_stack) >= 2):
         num1 = op_stack.pop()
@@ -303,6 +312,7 @@ def round_operation():
 
 dict_stack[-1]["round"] = round_operation
 
+#Square roots the top item of the stack
 def sqrt_operation():
     if(len(op_stack) >= 1):
         if (op_stack[-1] >=0):
@@ -338,6 +348,7 @@ dict_stack[-1]["def"] = def_operation
 
 ######################### Stack Operations Begin #######################################
 
+#Will remove top item of the stack and print to the screen
 def pop_and_print():
     if(len(op_stack) >= 1):
         op1 = op_stack.pop()
@@ -356,6 +367,7 @@ def pop_and_print():
 
 dict_stack[-1]["="] = pop_and_print
 
+#Will remove top item of stack and print to the screen, will show how it would look like in postscript notation
 def pop_and_print2():
     if(len(op_stack) >= 1):
         op1 = op_stack.pop()
@@ -372,6 +384,7 @@ def pop_and_print2():
         raise StackEmpty("Stack is empty! Nothing to print")
 dict_stack[-1]["=="] = pop_and_print2
 
+#Swaps the top of the stack item and the next item in stack
 def exch_operation():
     if (len(op_stack) >= 2):
         num1 = op_stack.pop() #Top of stack
@@ -383,6 +396,7 @@ def exch_operation():
 
 dict_stack[-1]["exch"] = exch_operation
 
+#Removes one item from the top of the stack
 def pop_operation():
     if (len(op_stack) >= 1):
         op_stack.pop()
@@ -391,6 +405,7 @@ def pop_operation():
 
 dict_stack[-1]["pop"] = pop_operation
 
+#Duplicates what is on the top of the stack
 def dup_operation():
     if (len(op_stack) > 0):
         num = op_stack.pop()
@@ -401,17 +416,20 @@ def dup_operation():
 
 dict_stack[-1]["dup"] = dup_operation
 
+#Clears the op_stack of inputs
 def clear_operation():
     op_stack.clear()
 
 dict_stack[-1]["clear"] = clear_operation
 
+#Will push the count of the stack to op_stack
 def count_operation():
     count = len(op_stack)
     op_stack.append(count)
 
 dict_stack[-1]["count"] = count_operation
 
+#This copies the operation based on the number indicated by the user in the op_stack
 def copy_operation():
     copyList = []
 
@@ -443,29 +461,7 @@ dict_stack[-1]["copy"] = copy_operation
 
 ######################### Dictionary Operations Begin #####################################
 
-#This is what will go through and check the dictionary to see if it is callable
-#If it is not callable, then it will check the instance, and process input,
-#otherwise it is a value and will append to the stack.
-# def lookup_in_dictionary_dynamic(input, dstack = dict_stack):#modify this
-#     #if(dict_stack is []):
-#         #// throw exception
-#     #top_dict = dict_stack[-1]
-#     if input in top_dict: #Right here is where we iterate through maybe do a while loop with flag or until we reach beginning, have a flag set to dynamic so we can extend it to lexical once we are done
-#         value = top_dict[input]
-#         if callable(value):
-#             value()
-#         elif isinstance(value, list):
-#             for item in value:
-#                 process_input(item)
-
-#         else:
-#             op_stack.append(value)
-#     else:
-#         #recursively call lookup in dictionary (pass in the dict stack except the last item)
-#         #aise ParseFailed(f"Input {input} is not in dictionary")
-
-# #def lookup_in_dictionary_static:
-
+#This is the default scope, will check top of stack first, then move to the next dictionary on the stack until reaches parent
 def lookup_in_dictionary_dynamic(input, dstack = dict_stack):#modify this
     
     if(dict_stack is []):
@@ -486,7 +482,18 @@ def lookup_in_dictionary_dynamic(input, dstack = dict_stack):#modify this
     else:
         lookup_in_dictionary_dynamic(input, dstack[:-1])
 
-    
+#This will lookup inputs based on the parent dictionaries, find where the input is in the dict_stack and slice it
+def lookup_in_dictionary_static(input, dstack = dict_stack):
+    j = 0
+    for i in dict_stack:
+        if input in i:
+            break
+        j += 1
+    updatedList = dict_stack[:j + 1]
+
+    lookup_in_dictionary_dynamic(input, updatedList)
+
+#Creates a new instances of DictNode and pushes it in the op_stack
 def dict_operation():
     if (len(op_stack) > 0):
         num = op_stack.pop()
@@ -513,6 +520,7 @@ def dict_length_op():
 
 dict_stack[-1]["length"] = dict_length_op
 
+#Gets the current length of the dictionary that is at the top of dict_stack
 def dict_currentlength_op():
     if (len(dict_stack) > 0):
         op_stack.append(dict_stack[-1].count())
@@ -521,6 +529,7 @@ def dict_currentlength_op():
     
 dict_stack[-1]["currentdict length"] = dict_currentlength_op
 
+#Gets max length of dictionary on top of the stack, add the max length to the stack
 def dict_maxlength_op():
     if (len(op_stack) > 0):
         mDict = op_stack.pop()
@@ -533,6 +542,7 @@ def dict_maxlength_op():
 
 dict_stack[-1]["maxlength"] = dict_maxlength_op
 
+#Gets the current max length of dictionary
 def dict_currentmaxlength_op():
     if (len(dict_stack) > 0):
         op_stack.append(dict_stack[-1].limit)
@@ -540,7 +550,8 @@ def dict_currentmaxlength_op():
         raise Exception("Error finding dictionary!")
     
 dict_stack[-1]["currentdict maxlength"] = dict_currentmaxlength_op
-    
+
+#Adding the newly created dictionary from stack to the dict_stack and that is the new stack key value pairs are placed
 def dict_begin_op():
     if (len(op_stack) > 0):
         newdict = op_stack.pop()
@@ -877,15 +888,6 @@ def ifelse_operation():
                 process_input(j)
         else:
             raise TypeMismatch("Not valid arguments in stack")
-        # if (isinstance(outputTrue, str) and isinstance(outputFalse, str) and isinstance(bool_var, bool)):
-        #     if(bool_var):
-        #         outputTrue = outputTrue[1:len(outputTrue) - 1]
-        #         op_stack.append(outputTrue.strip())
-        #     else:
-        #         outputFalse = outputFalse[1:len(outputFalse) - 1]
-        #         op_stack.append(outputFalse.strip())
-        # else:
-        #     raise TypeMismatch("Not valid arguments in stack")
         
     else:
         raise TypeMismatch("Not enough arguments in stack")
@@ -917,6 +919,7 @@ def for_operation():
 
 dict_stack[-1]["for"] = for_operation
 
+#Will repeat operations for a set number of times based on user input
 def repeat_operation():
     if (len(op_stack) >= 2): 
         codeBlock = op_stack.pop()
@@ -933,6 +936,8 @@ dict_stack[-1]["repeat"] = repeat_operation
 
 #########################   Flow Control Operations End #################################
 
+#How to process userinputs, will try constants, then if that fails, will look into dictionary. Based on the flag, it
+#will determine whether to do the static or dynamic scoping
 def process_input(user_input):
     #print(user_input)
     try:
@@ -943,9 +948,8 @@ def process_input(user_input):
         try:
             if (isDynamic):
                 lookup_in_dictionary_dynamic(user_input)
-                # lookup_in_dictionary_dynamic(user_input)
-            # else:
-            #     lookup_in_dictionary_static(user_input)
+            else:
+                lookup_in_dictionary_static(user_input)
         except Exception as e:
             logging.error(e)
 
