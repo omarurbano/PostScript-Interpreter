@@ -4,6 +4,8 @@
 
 Postscript-Inerpreter uses python to mimic how postscript programming language operates. It demonstrates a perfect example of dynamic scoping and can toggle between dynamic and lexical scoping to see how it behaves. There are over 40 operations already impelmented. Go ahead and give it a try
 
+Video Demo link: https://wsu.zoom.us/rec/share/X4BhzRxZTteMDhrNSymGicjpy5oyQ_agNjkv-X19CEFrdK7MX-q1uD_KlTJh0RTh.fM74Rhk65llXG7CB?startTime=1745732936000
+
 ## Features
 
 - Dynamic Scoping
