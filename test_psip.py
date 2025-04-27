@@ -360,21 +360,21 @@ def testing_getinterval():
     psip.process_input("7")
     psip.process_input("5")
     psip.process_input("getinterval")
-    assert psip.op_stack[-1] == "World"
+    assert psip.op_stack[-1] == "(World)"
 
     psip.op_stack.clear()
     psip.process_input("()")
     psip.process_input("0")
     psip.process_input("0")
     psip.process_input("getinterval")
-    assert psip.op_stack[-1] == ""
+    assert psip.op_stack[-1] == "()"
 
     psip.op_stack.clear()
     psip.process_input("(I)")
     psip.process_input("0")
     psip.process_input("1")
     psip.process_input("getinterval")
-    assert psip.op_stack[-1] == "I"
+    assert psip.op_stack[-1] == "(I)"
 
 #Testing get string operation, gets the ascii value of index indicated from string
 def testing_get():
@@ -403,28 +403,28 @@ def testing_PutInterval():
     psip.process_input("0")
     psip.process_input("(Jello)")
     psip.process_input("putinterval")
-    assert psip.op_stack[-1] == "Jello"
+    assert psip.op_stack[-1] == "(Jello)"
 
     psip.op_stack.clear()
     psip.process_input("(H)")
     psip.process_input("0")
     psip.process_input("(J)")
     psip.process_input("putinterval")
-    assert psip.op_stack[-1] == "J"
+    assert psip.op_stack[-1] == "(J)"
 
     psip.op_stack.clear()
     psip.process_input("(Hello Cali)")
     psip.process_input("6")
     psip.process_input("(Omar)")
     psip.process_input("putinterval")
-    assert psip.op_stack[-1] == "Hello Omar"
+    assert psip.op_stack[-1] == "(Hello Omar)"
 
     psip.op_stack.clear()
     psip.process_input("(Job, Hello)")
     psip.process_input("0")
     psip.process_input("(B)")
     psip.process_input("putinterval")
-    assert psip.op_stack[-1] == "Bob, Hello"
+    assert psip.op_stack[-1] == "(Bob, Hello)"
 
 #Testing equals operation, compares two inputs and check if its true or false
 def testing_eq():

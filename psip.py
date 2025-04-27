@@ -1,7 +1,7 @@
 import logging
 import math
 import re
-logging.basicConfig(level = logging.DEBUG) #INFO, DEBUG
+logging.basicConfig(level = logging.INFO) #INFO, DEBUG
 
 op_stack = []
 dict_stack = []
@@ -106,13 +106,8 @@ def process_number(input):
 def process_code_block(input):
     logging.debug(f"Input to process number: {input}")
     if len(input) >= 2 and input.startswith("{") and input.endswith("}"):
-            # if(input[1: -1].startswith("(") and input[1:-1].endswith(")")): #if inner code contains a string only, needed for conditional
-            #     return input[1:-1]
-            # else:
             rInner = re.findall(r'\([^\)]+\)|=|\S+', input[1:-1])
-            print(f"this is rInner: {rInner}")
-            print(f"This is input{input[1: -1].strip().split()}")
-            return rInner#input[1: -1].strip().split()
+            return rInner
     else:
         raise ParseFailed("Can't parse this into a code block")
 
@@ -470,7 +465,6 @@ def lookup_in_dictionary_dynamic(input, dstack = dict_stack):#modify this
     top_dict = dstack[-1]
     if input in top_dict:
         value = top_dict[input]
-        print(value)
         if callable(value):
             value()
         elif isinstance(value, list):
@@ -607,6 +601,7 @@ def strGetInterval():
                             result += word[start]
                             start += 1
                             traverse -= 1
+                        result = "(" + result + ")"
                         op_stack.append(result)
                 else:
                     raise Exception("Interval greater than string length")
@@ -654,17 +649,17 @@ def strPutInterval():
             j = startIndex
             
             
-            print(f"Before loop1: {res}")
+            #print(f"Before loop1: {res}")
             for i in string2:
                 res += i
                 j += 1
             
-            print(f"After loop1: {res}, {j}")
+            #print(f"After loop1: {res}, {j}")
             if (j < len(string1)): #If string2 is smaller, want to copy over rest of string 1
                 while (j < len(string1)):
                     res += string1[j]
                     j +=1 
-
+            res = "(" + res + ")"
             op_stack.append(res)
 
         else:
@@ -934,12 +929,48 @@ def repeat_operation():
 
 dict_stack[-1]["repeat"] = repeat_operation
 
+#Prints the whole stack to mimic how postscript prints out values
+def stack_op():
+    if (len(op_stack) > 0): 
+        for i in op_stack:
+            if (isinstance(i, str)):
+                if i.startswith("("):
+                    print(i[1:-1])
+                elif(i.startswith("[")):
+                    print("--nostringval--")
+            elif (isinstance(i, DictNode)):
+                print("--nostringval--")
+            elif(isinstance(i, list)):
+                print("--nostringval--")
+            else:
+                print(i)
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+
+dict_stack[-1]["stack"] = stack_op
+
+#Prints the whole stack, each value will be in postscript syntax
+def pstack_op():
+    if (len(op_stack) > 0): 
+        for i in op_stack:
+            if (isinstance(i, list)):
+                res = "{"
+                for item in i:
+                    res += f"{item} "
+                res = res[0:-1] + "}"
+                print(res)
+            else:
+                print(i)
+    else:
+        raise TypeMismatch("Not enough arguments in stack")
+
+dict_stack[-1]["pstack"] = pstack_op
+
 #########################   Flow Control Operations End #################################
 
 #How to process userinputs, will try constants, then if that fails, will look into dictionary. Based on the flag, it
 #will determine whether to do the static or dynamic scoping
 def process_input(user_input):
-    #print(user_input)
     try:
         process_constants(user_input)
     
